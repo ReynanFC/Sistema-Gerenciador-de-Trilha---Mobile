@@ -1,18 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Placeholder: Settings screen. Real layout in issue #7 (docs/prototipo/02-configuracao.png). -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Settings screen: map type (vector/satellite) and navigation mode (North Up/Course Up).
+     Prototype: docs/prototipo/02-configuracao.png -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".activities.SettingsActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/title_settings"
-        android:textColor="@color/text_primary"
-        android:textSize="@dimen/text_card_title" />
-</FrameLayout>
+    <!-- Top app bar with back button -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/surface"
+        app:navigationContentDescription="@string/action_back"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/title_settings"
+        app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_divider"
+        android:background="@color/outline" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/screen_margin">
+
+            <!-- Map type -->
+            <TextView
+                style="@style/TrilhaApp.SectionLabel"
+                android:text="@string/settings_section_map_type" />
+
+            <include
+                android:id="@+id/option_map_vector"
+                layout="@layout/component_option_card" />
+
+            <include
+                android:id="@+id/option_map_satellite"
+                layout="@layout/component_option_card" />
+
+            <!-- Navigation mode -->
+            <TextView
+                style="@style/TrilhaApp.SectionLabel"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:text="@string/settings_section_navigation" />
+
+            <include
+                android:id="@+id/option_north_up"
+                layout="@layout/component_option_card" />
+
+            <include
+                android:id="@+id/option_course_up"
+                layout="@layout/component_option_card" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:lineSpacingExtra="2dp"
+                android:text="@string/settings_footnote"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_footnote" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_save"
+        style="@style/TrilhaApp.Button.Primary"
+        android:layout_margin="@dimen/screen_margin"
+        android:text="@string/settings_save" />
+</LinearLayout>

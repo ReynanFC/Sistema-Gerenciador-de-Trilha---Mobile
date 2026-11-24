@@ -22,6 +22,11 @@
     <color name="route_vector">#1565C0</color>
     <color name="route_satellite">#FFC94D</color>
 
+    <!-- Selected option card -->
+    <color name="green_selected_background">#F1F7EF</color>
+    <color name="compass_north">#C62828</color>
+    <color name="compass_south">#9E9E9E</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
