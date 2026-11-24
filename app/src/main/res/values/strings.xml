@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">Sistema_gerenciador_Trilha</string>
+    <string name="app_name">TrilhaApp</string>
+
+    <!-- Tela principal -->
+    <string name="principal_subtitulo">Registre, consulte e reviva suas trilhas.</string>
+    <string name="menu_registrar_titulo">Registrar trilha</string>
+    <string name="menu_registrar_subtitulo">Grave seu percurso com o GPS</string>
+    <string name="menu_consultar_titulo">Consultar trilhas</string>
+    <string name="menu_consultar_subtitulo">Ver, editar e apagar trilhas salvas</string>
+    <string name="menu_configuracoes_titulo">Configurações</string>
+    <string name="menu_configuracoes_subtitulo">Tipo de mapa e forma de navegação</string>
+    <string name="principal_configuracao_atual">Configuração atual</string>
+
+    <!-- Valores de configuração (reutilizados nos chips e na tela de Configuração) -->
+    <string name="config_mapa_vetorial">Mapa vetorial</string>
+    <string name="config_mapa_satelite">Mapa satélite</string>
+    <string name="config_north_up">North Up</string>
+    <string name="config_course_up">Course Up</string>
 </resources>

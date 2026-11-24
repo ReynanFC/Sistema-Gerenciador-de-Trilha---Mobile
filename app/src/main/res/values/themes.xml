@@ -1,8 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Sistema_gerenciador_Trilha" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <!-- Tema base: claro, seguindo o protótipo -->
+    <style name="Base.Theme.Sistema_gerenciador_Trilha" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/verde_primario</item>
+        <item name="colorOnPrimary">@color/texto_sobre_primario</item>
+        <item name="colorPrimaryContainer">@color/verde_container</item>
+        <item name="colorError">@color/vermelho_destrutivo</item>
+        <item name="android:colorBackground">@color/fundo</item>
+        <item name="colorSurface">@color/superficie</item>
+        <item name="colorOnSurface">@color/texto_primario</item>
+        <item name="colorOnSurfaceVariant">@color/texto_secundario</item>
+        <item name="colorOutline">@color/borda</item>
     </style>
 
     <style name="Theme.Sistema_gerenciador_Trilha" parent="Base.Theme.Sistema_gerenciador_Trilha" />

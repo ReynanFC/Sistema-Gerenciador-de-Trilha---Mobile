@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margem_tela">20dp</dimen>
+    <dimen name="espaco_pequeno">8dp</dimen>
+    <dimen name="espaco_medio">12dp</dimen>
+    <dimen name="espaco_grande">24dp</dimen>
+
+    <dimen name="raio_cartao">16dp</dimen>
+    <dimen name="raio_icone">12dp</dimen>
+    <dimen name="borda_cartao">1dp</dimen>
+    <dimen name="alvo_toque_minimo">48dp</dimen>
+
+    <!-- Tela principal -->
+    <dimen name="cabecalho_icone_container">56dp</dimen>
+    <dimen name="cabecalho_icone">28dp</dimen>
+    <dimen name="menu_icone_container">52dp</dimen>
+    <dimen name="menu_icone">24dp</dimen>
+    <dimen name="menu_padding">18dp</dimen>
+    <dimen name="seta">24dp</dimen>
+
+    <dimen name="texto_titulo_app">32sp</dimen>
+    <dimen name="texto_subtitulo_app">15sp</dimen>
+    <dimen name="texto_titulo_cartao">18sp</dimen>
+    <dimen name="texto_subtitulo_cartao">13sp</dimen>
+    <dimen name="texto_rotulo_secao">12sp</dimen>
+    <dimen name="texto_chip">13sp</dimen>
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Componente: cartão "Configuração atual" com os chips de tipo de mapa e navegação.
+     Os textos dos chips são preenchidos pela Activity (onResume) a partir das preferências. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/config_atual"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rodape_config"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingTop="@dimen/espaco_medio"
+    android:paddingEnd="16dp"
+    android:paddingBottom="@dimen/espaco_pequeno">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="0.06"
+        android:text="@string/principal_configuracao_atual"
+        android:textAllCaps="true"
+        android:textColor="@color/texto_secundario"
+        android:textSize="@dimen/texto_rotulo_secao" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:chipSpacingHorizontal="@dimen/espaco_pequeno">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_tipo_mapa"
+            style="@style/TrilhaApp.ChipInfo"
+            android:text="@string/config_mapa_vetorial" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_navegacao"
+            style="@style/TrilhaApp.ChipInfo"
+            android:text="@string/config_north_up" />
+    </com.google.android.material.chip.ChipGroup>
+</LinearLayout>
