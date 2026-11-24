@@ -1,4 +1,4 @@
 /**
- * Classes de modelo (POJOs) como Trilha e Ponto: apenas atributos, construtores e getters/setters.
+ * Model classes (POJOs) such as Trail and TrackPoint: fields, constructors and getters/setters only.
  */
 package com.reynanfc.sistema_gerenciador_trilha.model;

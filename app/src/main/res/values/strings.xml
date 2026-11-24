@@ -1,19 +1,19 @@
 <resources>
     <string name="app_name">TrilhaApp</string>
 
-    <!-- Tela principal -->
-    <string name="principal_subtitulo">Registre, consulte e reviva suas trilhas.</string>
-    <string name="menu_registrar_titulo">Registrar trilha</string>
-    <string name="menu_registrar_subtitulo">Grave seu percurso com o GPS</string>
-    <string name="menu_consultar_titulo">Consultar trilhas</string>
-    <string name="menu_consultar_subtitulo">Ver, editar e apagar trilhas salvas</string>
-    <string name="menu_configuracoes_titulo">Configurações</string>
-    <string name="menu_configuracoes_subtitulo">Tipo de mapa e forma de navegação</string>
-    <string name="principal_configuracao_atual">Configuração atual</string>
+    <!-- Main screen -->
+    <string name="main_subtitle">Registre, consulte e reviva suas trilhas.</string>
+    <string name="menu_record_title">Registrar trilha</string>
+    <string name="menu_record_subtitle">Grave seu percurso com o GPS</string>
+    <string name="menu_trails_title">Consultar trilhas</string>
+    <string name="menu_trails_subtitle">Ver, editar e apagar trilhas salvas</string>
+    <string name="menu_settings_title">Configurações</string>
+    <string name="menu_settings_subtitle">Tipo de mapa e forma de navegação</string>
+    <string name="main_current_settings">Configuração atual</string>
 
-    <!-- Valores de configuração (reutilizados nos chips e na tela de Configuração) -->
-    <string name="config_mapa_vetorial">Mapa vetorial</string>
-    <string name="config_mapa_satelite">Mapa satélite</string>
-    <string name="config_north_up">North Up</string>
-    <string name="config_course_up">Course Up</string>
+    <!-- Settings values (reused by the chips and the Settings screen) -->
+    <string name="settings_map_vector">Mapa vetorial</string>
+    <string name="settings_map_satellite">Mapa satélite</string>
+    <string name="settings_north_up">North Up</string>
+    <string name="settings_course_up">Course Up</string>
 </resources>

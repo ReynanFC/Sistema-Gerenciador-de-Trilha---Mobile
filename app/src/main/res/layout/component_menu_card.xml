@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Componente: cartão de opção do menu (ícone, título, subtítulo e seta).
-     Usado via <include android:id="@+id/..." layout="@layout/component_menu_card" />.
-     O id do include substitui o id da raiz; ícone e textos são preenchidos pela Activity
-     através de menu_card_icone, menu_card_titulo e menu_card_subtitulo. -->
+<!-- Component: menu option card (icon, title, subtitle and chevron).
+     Used via <include android:id="@+id/..." layout="@layout/component_menu_card" />.
+     The include id replaces the root id; the icon and texts are filled in by the Activity
+     through menu_card_icon, menu_card_title and menu_card_subtitle. -->
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/TrilhaApp.Cartao.Menu">
+    style="@style/TrilhaApp.Card.Menu">
 
-    <LinearLayout style="@style/TrilhaApp.Menu.Conteudo">
+    <LinearLayout style="@style/TrilhaApp.Menu.Content">
 
         <ImageView
-            android:id="@+id/menu_card_icone"
-            style="@style/TrilhaApp.Menu.Icone"
-            tools:src="@drawable/ic_registrar" />
+            android:id="@+id/menu_card_icon"
+            style="@style/TrilhaApp.Menu.Icon"
+            tools:src="@drawable/ic_record" />
 
-        <LinearLayout style="@style/TrilhaApp.Menu.Textos">
-
-            <TextView
-                android:id="@+id/menu_card_titulo"
-                style="@style/TrilhaApp.Menu.Titulo"
-                tools:text="@string/menu_registrar_titulo" />
+        <LinearLayout style="@style/TrilhaApp.Menu.Texts">
 
             <TextView
-                android:id="@+id/menu_card_subtitulo"
-                style="@style/TrilhaApp.Menu.Subtitulo"
-                tools:text="@string/menu_registrar_subtitulo" />
+                android:id="@+id/menu_card_title"
+                style="@style/TrilhaApp.Menu.Title"
+                tools:text="@string/menu_record_title" />
+
+            <TextView
+                android:id="@+id/menu_card_subtitle"
+                style="@style/TrilhaApp.Menu.Subtitle"
+                tools:text="@string/menu_record_subtitle" />
         </LinearLayout>
 
-        <ImageView style="@style/TrilhaApp.Menu.Seta" />
+        <ImageView style="@style/TrilhaApp.Menu.Chevron" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

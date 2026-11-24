@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Paleta do protótipo (docs/prototipo) -->
-    <color name="verde_primario">#2E7D32</color>
-    <color name="verde_container">#E3EFE3</color>
-    <color name="vermelho_destrutivo">#B3261E</color>
+    <!-- Prototype palette (docs/prototipo) -->
+    <color name="green_primary">#2E7D32</color>
+    <color name="green_container">#E3EFE3</color>
+    <color name="red_destructive">#B3261E</color>
 
-    <!-- Superfícies -->
-    <color name="fundo">#F4F6F2</color>
-    <color name="superficie">#FFFFFF</color>
-    <color name="superficie_variante">#E9ECE6</color>
-    <color name="borda">#E1E5DE</color>
+    <!-- Surfaces -->
+    <color name="background">#F4F6F2</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#E9ECE6</color>
+    <color name="outline">#E1E5DE</color>
 
-    <!-- Textos -->
-    <color name="texto_primario">#1B1F1A</color>
-    <color name="texto_secundario">#5F665C</color>
-    <color name="texto_sobre_primario">#FFFFFF</color>
-    <color name="texto_sobre_primario_secundario">#E6FFFFFF</color>
-    <color name="icone_cabecalho_fundo">#29FFFFFF</color>
+    <!-- Texts -->
+    <color name="text_primary">#1B1F1A</color>
+    <color name="text_secondary">#5F665C</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_on_primary_secondary">#E6FFFFFF</color>
+    <color name="header_icon_background">#29FFFFFF</color>
 
-    <!-- Percurso no mapa: azul no vetorial, amarelo no satélite -->
-    <color name="percurso_vetorial">#1565C0</color>
-    <color name="percurso_satelite">#FFC94D</color>
+    <!-- Route on the map: blue on vector, yellow on satellite -->
+    <color name="route_vector">#1565C0</color>
+    <color name="route_satellite">#FFC94D</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
