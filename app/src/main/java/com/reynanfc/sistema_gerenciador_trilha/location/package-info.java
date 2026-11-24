@@ -1,4 +1,4 @@
 /**
- * Encapsula o GPS (FusedLocationProviderClient) e os cálculos de distância e velocidade.
+ * Wraps the GPS (FusedLocationProviderClient) and the distance and speed calculations.
  */
 package com.reynanfc.sistema_gerenciador_trilha.location;

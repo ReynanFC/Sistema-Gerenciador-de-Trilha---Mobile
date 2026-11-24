@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Component: green header of the main screen (icon, app name and subtitle).
+     Used via <include layout="@layout/component_main_header" />. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/green_primary"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/spacing_large"
+    android:paddingTop="@dimen/spacing_large"
+    android:paddingEnd="@dimen/spacing_large"
+    android:paddingBottom="28dp">
+
+    <ImageView
+        android:layout_width="@dimen/header_icon_container"
+        android:layout_height="@dimen/header_icon_container"
+        android:background="@drawable/bg_header_icon"
+        android:importantForAccessibility="no"
+        android:padding="14dp"
+        android:src="@drawable/ic_mountain"
+        app:tint="@color/text_on_primary" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/app_name"
+        android:textColor="@color/text_on_primary"
+        android:textSize="@dimen/text_app_title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:text="@string/main_subtitle"
+        android:textColor="@color/text_on_primary_secondary"
+        android:textSize="@dimen/text_app_subtitle" />
+</LinearLayout>

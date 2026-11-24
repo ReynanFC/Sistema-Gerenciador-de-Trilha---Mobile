@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- White card with thin outline and 16dp corners -->
+    <style name="TrilhaApp.Card" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/surface</item>
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="strokeColor">@color/outline</item>
+        <item name="strokeWidth">@dimen/card_stroke_width</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
+    <!-- Main screen menu card (clickable, with ripple) -->
+    <style name="TrilhaApp.Card.Menu">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/spacing_medium</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <!-- Parent of the menu card inner styles -->
+    <style name="TrilhaApp.Menu" parent="" />
+
+    <style name="TrilhaApp.Menu.Content">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/min_touch_target</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">@dimen/menu_padding</item>
+    </style>
+
+    <!-- Light green square behind the menu icon -->
+    <style name="TrilhaApp.Menu.Icon">
+        <item name="android:layout_width">@dimen/menu_icon_container</item>
+        <item name="android:layout_height">@dimen/menu_icon_container</item>
+        <item name="android:background">@drawable/bg_menu_icon</item>
+        <item name="android:padding">14dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:importantForAccessibility">no</item>
+        <item name="tint">@color/green_primary</item>
+    </style>
+
+    <style name="TrilhaApp.Menu.Texts">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginStart">@dimen/spacing_large</item>
+        <item name="android:layout_marginEnd">@dimen/spacing_small</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="TrilhaApp.Menu.Title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_card_title</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TrilhaApp.Menu.Subtitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:textSize">@dimen/text_card_subtitle</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TrilhaApp.Menu.Chevron">
+        <item name="android:layout_width">@dimen/chevron_size</item>
+        <item name="android:layout_height">@dimen/chevron_size</item>
+        <item name="android:src">@drawable/ic_chevron_right</item>
+        <item name="android:importantForAccessibility">no</item>
+        <item name="tint">@color/text_secondary</item>
+    </style>
+
+    <!-- Read-only chip showing the current settings -->
+    <style name="TrilhaApp.ChipInfo" parent="Widget.Material3.Chip.Assist">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
+        <item name="android:checkable">false</item>
+        <item name="android:textSize">@dimen/text_chip</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="chipBackgroundColor">@color/surface</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipCornerRadius">@dimen/card_corner_radius</item>
+    </style>
+</resources>
