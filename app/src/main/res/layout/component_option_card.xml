@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Component: selectable option card (thumbnail, title, optional "Padrão" badge, description, radio).
+     Used via <include android:id="@+id/..." layout="@layout/component_option_card" />.
+     The include id replaces the root id. The Activity fills option_thumbnail, option_title and
+     option_description, shows option_badge on the default option and calls setChecked() on the card
+     (the card outline/background react to the checked state; the radio is only visual). -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/TrilhaApp.Card.Option"
+    tools:checked="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/min_touch_target"
+        android:orientation="horizontal"
+        android:padding="@dimen/option_padding">
+
+        <ImageView
+            android:id="@+id/option_thumbnail"
+            android:layout_width="@dimen/option_thumbnail"
+            android:layout_height="@dimen/option_thumbnail"
+            android:importantForAccessibility="no"
+            tools:src="@drawable/thumb_map_vector" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/option_padding"
+            android:layout_marginEnd="@dimen/spacing_small"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/option_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_option_title"
+                    tools:text="@string/settings_map_vector_title" />
+
+                <TextView
+                    android:id="@+id/option_badge"
+                    style="@style/TrilhaApp.Badge"
+                    android:layout_marginStart="@dimen/spacing_small"
+                    android:text="@string/settings_default_badge"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/option_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_card_subtitle"
+                tools:text="@string/settings_map_vector_description" />
+        </LinearLayout>
+
+        <!-- Visual only: the card handles the click -->
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/option_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:importantForAccessibility="no"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:buttonTint="@color/selector_option_stroke"
+            tools:checked="true" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

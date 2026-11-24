@@ -22,4 +22,20 @@
     <string name="settings_map_satellite">Mapa satélite</string>
     <string name="settings_north_up">North Up</string>
     <string name="settings_course_up">Course Up</string>
+
+    <!-- Common actions -->
+    <string name="action_back">Voltar</string>
+
+    <!-- Settings screen -->
+    <string name="settings_section_map_type">Tipo de mapa</string>
+    <string name="settings_map_vector_title">Vetorial</string>
+    <string name="settings_map_vector_description">Ruas, parques e nomes de lugares.</string>
+    <string name="settings_map_satellite_title">Satélite</string>
+    <string name="settings_map_satellite_description">Imagem aérea do terreno.</string>
+    <string name="settings_section_navigation">Forma de navegação</string>
+    <string name="settings_north_up_description">O mapa fica sempre orientado para o norte.</string>
+    <string name="settings_course_up_description">O mapa gira e acompanha a direção do seu deslocamento (rumo).</string>
+    <string name="settings_default_badge">Padrão</string>
+    <string name="settings_footnote">Essas opções valem para as telas Registrar trilha e Visualizar trilha.</string>
+    <string name="settings_save">Salvar configurações</string>
 </resources>

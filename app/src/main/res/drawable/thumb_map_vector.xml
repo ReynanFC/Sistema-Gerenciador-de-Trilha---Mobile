@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Thumbnail: vector map (roads, park and lake) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <group>
+        <clip-path android:pathData="M12,0H52A12,12 0,0 1,64 12V52A12,12 0,0 1,52 64H12A12,12 0,0 1,0 52V12A12,12 0,0 1,12 0Z" />
+        <path android:fillColor="#E6EEE2" android:pathData="M0,0H64V64H0Z" />
+        <path android:fillColor="#CFE3C8" android:pathData="M30,0H64V34H30Z" />
+        <path android:fillColor="#FFFFFF" android:pathData="M23,0H29V64H23Z" />
+        <path android:strokeColor="#FFFFFF" android:strokeWidth="5" android:pathData="M0,46Q32,36 64,44" />
+        <path android:fillColor="#90C2EA" android:pathData="M33,20a8,5 0,1 0,16 0a8,5 0,1 0,-16 0" />
+    </group>
+</vector>

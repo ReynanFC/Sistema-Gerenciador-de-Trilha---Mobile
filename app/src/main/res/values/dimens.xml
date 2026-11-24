@@ -24,4 +24,15 @@
     <dimen name="text_card_subtitle">13sp</dimen>
     <dimen name="text_section_label">12sp</dimen>
     <dimen name="text_chip">13sp</dimen>
+
+    <!-- Settings screen -->
+    <dimen name="option_thumbnail">64dp</dimen>
+    <dimen name="option_padding">14dp</dimen>
+    <dimen name="option_selected_stroke_width">2dp</dimen>
+    <dimen name="text_option_title">17sp</dimen>
+    <dimen name="text_badge">11sp</dimen>
+    <dimen name="text_footnote">13sp</dimen>
+    <dimen name="text_button">16sp</dimen>
+    <dimen name="button_height">56dp</dimen>
+    <dimen name="toolbar_divider">1dp</dimen>
 </resources>
