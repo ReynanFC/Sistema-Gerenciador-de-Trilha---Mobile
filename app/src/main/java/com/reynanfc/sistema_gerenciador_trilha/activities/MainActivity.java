@@ -18,9 +18,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.reynanfc.sistema_gerenciador_trilha.R;
 
-/**
- * Main screen: menu that opens the other screens and shows the current settings.
- */
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -33,12 +30,6 @@ public class MainActivity extends AppCompatActivity {
         setupMenuCards();
     }
 
-    /**
-     * The app draws behind the system bars (edge-to-edge), so the green header gets the
-     * status bar height as extra top padding and the root gets the navigation bar space.
-     * The initial paddings are saved first so the insets are not added twice when the
-     * listener runs again (e.g. on rotation).
-     */
     private void setupWindowInsets() {
         View rootLayout = findViewById(R.id.main);
         View header = findViewById(R.id.header);
@@ -74,9 +65,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Fills the three menu cards (same included layout) and sets which screen each one opens.
-     */
     private void setupMenuCards() {
         setupCard(
                 R.id.card_record,
@@ -103,16 +91,6 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    /**
-     * Binds one included menu card. The inner views are searched inside the card root
-     * because the three cards share the same inner ids.
-     *
-     * @param cardId              id given to the {@code <include>}
-     * @param iconResId           card icon
-     * @param titleResId          card title
-     * @param subtitleResId       card subtitle
-     * @param destinationActivity screen opened when the card is clicked
-     */
     private void setupCard(@IdRes int cardId,
                            @DrawableRes int iconResId,
                            @StringRes int titleResId,
