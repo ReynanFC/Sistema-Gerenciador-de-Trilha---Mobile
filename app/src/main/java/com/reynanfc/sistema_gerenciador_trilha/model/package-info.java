@@ -1,4 +1,4 @@
 /**
- * Model classes (POJOs) such as Trail and TrackPoint: fields, constructors and getters/setters only.
+ * Model classes: Trail (mutable POJO, persisted and renamed) and TrackPoint (immutable record of a GPS fix).
  */
 package com.reynanfc.sistema_gerenciador_trilha.model;
