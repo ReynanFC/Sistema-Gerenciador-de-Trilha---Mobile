@@ -32,7 +32,6 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_POINT_ACCURACY = "accuracy";
     public static final String COLUMN_POINT_TIMESTAMP = "timestamp";
 
-    // Times are epoch millis (INTEGER), speeds m/s and distances meters (REAL)
     private static final String SQL_CREATE_TRAIL =
             "CREATE TABLE " + TABLE_TRAIL + " ("
                     + COLUMN_TRAIL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -43,7 +42,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     + COLUMN_TRAIL_MAX_SPEED + " REAL NOT NULL, "
                     + COLUMN_TRAIL_DISTANCE + " REAL NOT NULL)";
 
-    // ON DELETE CASCADE: deleting a trail deletes its points too
+
     private static final String SQL_CREATE_TRACK_POINT =
             "CREATE TABLE " + TABLE_TRACK_POINT + " ("
                     + COLUMN_POINT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -56,7 +55,6 @@ public class DbHelper extends SQLiteOpenHelper {
                     + "FOREIGN KEY (" + COLUMN_POINT_TRAIL_ID + ") REFERENCES "
                     + TABLE_TRAIL + "(" + COLUMN_TRAIL_ID + ") ON DELETE CASCADE)";
 
-    // Points are always loaded by trail, so this index avoids a full table scan
     private static final String SQL_CREATE_POINT_INDEX =
             "CREATE INDEX idx_point_trail ON " + TABLE_TRACK_POINT + "(" + COLUMN_POINT_TRAIL_ID + ")";
 
@@ -64,7 +62,6 @@ public class DbHelper extends SQLiteOpenHelper {
         super(context.getApplicationContext(), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    // SQLite ships with foreign keys disabled; without this the CASCADE above is ignored
     @Override
     public void onConfigure(SQLiteDatabase db) {
         super.onConfigure(db);
@@ -78,7 +75,6 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_POINT_INDEX);
     }
 
-    // No released versions yet, so recreating the schema is enough (drops saved trails)
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRACK_POINT);
