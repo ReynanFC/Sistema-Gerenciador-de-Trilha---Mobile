@@ -16,7 +16,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.chip.Chip;
 import com.reynanfc.sistema_gerenciador_trilha.R;
+import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +30,23 @@ public class MainActivity extends AppCompatActivity {
 
         setupWindowInsets();
         setupMenuCards();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateCurrentSettings();
+    }
+
+    private void updateCurrentSettings() {
+        SettingsPrefs prefs = new SettingsPrefs(this);
+
+        View card = findViewById(R.id.current_settings);
+        Chip chipMapType = card.findViewById(R.id.chip_map_type);
+        Chip chipNavigation = card.findViewById(R.id.chip_navigation);
+
+        chipMapType.setText(prefs.getMapType().labelResId);
+        chipNavigation.setText(prefs.getNavigationMode().labelResId);
     }
 
     private void setupWindowInsets() {
