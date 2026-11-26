@@ -3,11 +3,35 @@ package com.reynanfc.sistema_gerenciador_trilha.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.StringRes;
+
+import com.reynanfc.sistema_gerenciador_trilha.R;
+
 public class SettingsPrefs {
 
-    public enum MapType { VECTOR, SATELLITE }
+    public enum MapType {
+        VECTOR(R.string.settings_map_vector),
+        SATELLITE(R.string.settings_map_satellite);
 
-    public enum NavigationMode { NORTH_UP, COURSE_UP }
+        @StringRes
+        public final int labelResId;
+
+        MapType(@StringRes int labelResId) {
+            this.labelResId = labelResId;
+        }
+    }
+
+    public enum NavigationMode {
+        NORTH_UP(R.string.settings_north_up),
+        COURSE_UP(R.string.settings_course_up);
+
+        @StringRes
+        public final int labelResId;
+
+        NavigationMode(@StringRes int labelResId) {
+            this.labelResId = labelResId;
+        }
+    }
 
     private static final String PREFS_NAME = "settings";
     private static final String KEY_MAP_TYPE = "map_type";
