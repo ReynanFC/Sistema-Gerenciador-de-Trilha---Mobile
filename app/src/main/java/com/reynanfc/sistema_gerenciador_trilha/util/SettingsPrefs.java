@@ -19,7 +19,6 @@ public class SettingsPrefs {
     private final SharedPreferences prefs;
 
     public SettingsPrefs(Context context) {
-        // Application context: avoids holding a reference to the Activity
         prefs = context.getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
@@ -39,7 +38,6 @@ public class SettingsPrefs {
         prefs.edit().putString(KEY_NAVIGATION_MODE, navigationMode.name()).apply();
     }
 
-    // Enums are stored by name(); an unknown value (e.g. a renamed constant) falls back to the default
     private <E extends Enum<E>> E readEnum(String key, Class<E> type, E defaultValue) {
         String stored = prefs.getString(key, null);
         if (stored == null) {
