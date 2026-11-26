@@ -38,4 +38,5 @@
     <string name="settings_default_badge">Padrão</string>
     <string name="settings_footnote">Essas opções valem para as telas Registrar trilha e Visualizar trilha.</string>
     <string name="settings_save">Salvar configurações</string>
+    <string name="settings_saved">Configurações salvas</string>
 </resources>
