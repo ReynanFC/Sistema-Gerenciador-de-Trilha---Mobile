@@ -54,4 +54,10 @@
     <dimen name="text_sheet_title">22sp</dimen>
     <dimen name="sheet_handle_width">36dp</dimen>
     <dimen name="sheet_handle_height">4dp</dimen>
+
+    <!-- Trail list -->
+    <dimen name="list_icon_container">48dp</dimen>
+    <dimen name="list_fab_clearance">96dp</dimen>
+    <dimen name="text_metric">12sp</dimen>
+    <dimen name="empty_icon">64dp</dimen>
 </resources>

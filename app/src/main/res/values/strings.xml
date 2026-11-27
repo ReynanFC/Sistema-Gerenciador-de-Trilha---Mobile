@@ -96,4 +96,19 @@
     <string name="value_km">%1$s km</string>
     <string name="value_kmh">%1$s km/h</string>
     <string name="action_cancel">Cancelar</string>
+
+    <!-- Trail list screen -->
+    <string name="list_delete_trails">Apagar trilhas</string>
+    <plurals name="list_trail_count">
+        <item quantity="one">%d trilha</item>
+        <item quantity="other">%d trilhas</item>
+    </plurals>
+    <string name="list_total_distance">· %1$s km no total</string>
+    <string name="list_sort_newest">Mais recentes</string>
+    <string name="list_new_trail">Nova trilha</string>
+    <string name="list_empty_title">Nenhuma trilha ainda</string>
+    <string name="list_empty_message">Grave sua primeira trilha tocando em Nova trilha.</string>
+    <string name="list_load_error">Não foi possível carregar as trilhas</string>
+    <string name="action_rename">Renomear</string>
+    <string name="action_delete">Apagar</string>
 </resources>
