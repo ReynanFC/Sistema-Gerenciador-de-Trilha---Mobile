@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- End pin: dark disc, white border, white flag -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="34dp"
+    android:height="34dp"
+    android:viewportWidth="34"
+    android:viewportHeight="34">
+    <path
+        android:fillColor="#33000000"
+        android:pathData="M17,18m-15,0a15,15 0,1 1,30 0a15,15 0,1 1,-30 0" />
+    <path
+        android:fillColor="@color/surface"
+        android:pathData="M17,17m-15,0a15,15 0,1 1,30 0a15,15 0,1 1,-30 0" />
+    <path
+        android:fillColor="@color/text_primary"
+        android:pathData="M17,17m-12.5,0a12.5,12.5 0,1 1,25 0a12.5,12.5 0,1 1,-25 0" />
+    <path
+        android:fillColor="@color/surface"
+        android:pathData="M13,10.5h1.6v13h-1.6z M14.6,11h7.4l-1.6,2.8l1.6,2.8h-7.4z" />
+</vector>

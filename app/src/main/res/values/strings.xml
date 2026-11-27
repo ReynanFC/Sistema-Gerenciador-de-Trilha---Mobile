@@ -146,4 +146,10 @@
 
     <!-- Trail detail screen -->
     <string name="detail_not_found">Trilha não encontrada</string>
+    <string name="detail_start">Início</string>
+    <string name="detail_legend_start">Início</string>
+    <string name="detail_legend_end">Fim</string>
+    <string name="detail_legend_route">Percurso</string>
+    <string name="detail_no_points">Esta trilha não tem pontos para desenhar</string>
+    <string name="action_edit_name">Editar nome</string>
 </resources>

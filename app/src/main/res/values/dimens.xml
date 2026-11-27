@@ -65,4 +65,10 @@
     <dimen name="dialog_padding">24dp</dimen>
     <dimen name="dialog_icon_container">48dp</dimen>
     <dimen name="text_dialog_title">20sp</dimen>
+
+    <!-- Trail detail -->
+    <dimen name="detail_icon_container">40dp</dimen>
+    <dimen name="text_detail_value">18sp</dimen>
+    <dimen name="route_width">5dp</dimen>
+    <dimen name="detail_bounds_padding">48dp</dimen>
 </resources>
