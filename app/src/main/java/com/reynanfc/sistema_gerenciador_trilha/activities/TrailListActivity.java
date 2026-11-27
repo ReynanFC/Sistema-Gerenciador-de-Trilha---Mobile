@@ -24,6 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+/**
+ * Trail list screen: loads every trail from the database (newest first) and lets the user open,
+ * rename or delete them (one, a date range or all). Reloads in onResume to reflect changes.
+ * Flow and diagrams: docs/consultar-trilhas.md
+ */
 public class TrailListActivity extends AppCompatActivity implements TrailAdapter.Listener {
 
     private TrailDao trailDao;
