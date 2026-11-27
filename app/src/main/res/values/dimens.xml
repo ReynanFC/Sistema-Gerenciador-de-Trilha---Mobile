@@ -60,4 +60,9 @@
     <dimen name="list_fab_clearance">96dp</dimen>
     <dimen name="text_metric">12sp</dimen>
     <dimen name="empty_icon">64dp</dimen>
+
+    <!-- Dialogs -->
+    <dimen name="dialog_padding">24dp</dimen>
+    <dimen name="dialog_icon_container">48dp</dimen>
+    <dimen name="text_dialog_title">20sp</dimen>
 </resources>

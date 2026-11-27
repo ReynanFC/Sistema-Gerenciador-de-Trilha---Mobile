@@ -111,4 +111,13 @@
     <string name="list_load_error">Não foi possível carregar as trilhas</string>
     <string name="action_rename">Renomear</string>
     <string name="action_delete">Apagar</string>
+
+    <!-- Rename dialog -->
+    <string name="rename_title">Renomear trilha</string>
+    <string name="rename_recorded_at">Registrada em %1$s</string>
+    <string name="rename_name_label">Nome</string>
+    <string name="rename_name_required">O nome não pode ficar vazio</string>
+    <string name="rename_saved">Nome atualizado</string>
+    <string name="rename_error">Não foi possível renomear a trilha</string>
+    <string name="action_save">Salvar</string>
 </resources>
