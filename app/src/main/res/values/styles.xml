@@ -337,4 +337,24 @@
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textColor">@color/green_primary</item>
     </style>
+
+    <!-- Detail panel label/value (no tile background) -->
+    <style name="TrilhaApp.DetailValue" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">@dimen/text_detail_value</item>
+    </style>
+
+    <style name="TrilhaApp.LegendItem" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:drawablePadding">6dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">@dimen/text_metric</item>
+    </style>
 </resources>
