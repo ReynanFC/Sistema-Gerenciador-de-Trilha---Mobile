@@ -27,11 +27,11 @@ public class TrailDao {
     }
 
     /**
-     * Saves the trail and all its points atomically: if any insert fails, nothing is saved.
-     * The single transaction also makes bulk inserts fast, since SQLite writes to disk once
-     * at the commit instead of once per row.
+     * Salva a trilha e todos os seus pontos de forma atômica: se algum insert falhar, nada é salvo.
+     * A transação única também deixa a inserção em massa rápida, porque o SQLite grava no disco
+     * uma vez, no commit, em vez de uma vez por linha.
      *
-     * @return the generated trail id, also set on {@code trail}
+     * @return o id gerado da trilha, também definido em {@code trail}
      */
     public long insert(Trail trail) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -56,7 +56,7 @@ public class TrailDao {
         return trailId;
     }
 
-    // Points are not loaded here: the list screen only shows the summary
+    // Os pontos não são carregados aqui: a lista só mostra o resumo
     public List<Trail> findAll() {
         List<Trail> trails = new ArrayList<>();
         try (Cursor cursor = dbHelper.getReadableDatabase().query(
@@ -69,7 +69,7 @@ public class TrailDao {
         return trails;
     }
 
-    /** @return the trail with its points, or {@code null} if no trail has this id */
+    /** @return a trilha com seus pontos, ou {@code null} se nenhuma trilha tiver esse id */
     @Nullable
     public Trail findById(long trailId) {
         Trail trail;
@@ -127,7 +127,7 @@ public class TrailDao {
         return DatabaseUtils.queryNumEntries(dbHelper.getReadableDatabase(), DbHelper.TABLE_TRAIL);
     }
 
-    /** @return the number of renamed trails: 1, or 0 if no trail has this id */
+    /** @return quantas trilhas foram renomeadas: 1, ou 0 se nenhuma trilha tiver esse id */
     public int rename(long trailId, String newName) {
         ContentValues values = new ContentValues();
         values.put(DbHelper.COLUMN_TRAIL_NAME, newName);
@@ -136,7 +136,7 @@ public class TrailDao {
                 DbHelper.COLUMN_TRAIL_ID + " = ?", new String[]{String.valueOf(trailId)});
     }
 
-    // The delete methods only touch the trail table: ON DELETE CASCADE removes the points
+    // Os métodos de apagar só mexem na tabela trail: o ON DELETE CASCADE remove os pontos
     public int delete(long trailId) {
         return dbHelper.getWritableDatabase().delete(
                 DbHelper.TABLE_TRAIL,
@@ -144,10 +144,10 @@ public class TrailDao {
     }
 
     /**
-     * Deletes the trails that started between the two instants, both inclusive (SQL BETWEEN).
-     * The screen converts the picked dates to the start of the first day and the end of the last one.
+     * Apaga as trilhas que começaram entre os dois instantes, ambos incluídos (SQL BETWEEN).
+     * A tela converte as datas escolhidas para o início do primeiro dia e o fim do último.
      *
-     * @return the number of deleted trails
+     * @return quantas trilhas foram apagadas
      */
     public int deleteBetween(long fromMillis, long toMillis) {
         return dbHelper.getWritableDatabase().delete(

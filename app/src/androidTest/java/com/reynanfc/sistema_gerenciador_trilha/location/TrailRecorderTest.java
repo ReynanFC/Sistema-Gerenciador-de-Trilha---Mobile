@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class TrailRecorderTest {
 
-    // ~1.11 m per 0.00001 degree of latitude
+    // ~1,11 m a cada 0,00001 grau de latitude
     private static final double BASE_LAT = -12.9;
     private static final double BASE_LNG = -38.3;
 
@@ -29,7 +29,7 @@ public class TrailRecorderTest {
 
     @Test
     public void standingStillDoesNotAddDistance() {
-        // GPS wandering ~3 m around the same spot with 8 m accuracy
+        // GPS oscilando ~3 m em volta do mesmo lugar, com 8 m de precisão
         double[] jitter = {0, 0.00002, -0.00001, 0.00003, -0.00002, 0.00001};
         for (double offset : jitter) {
             recorder.addLocation(fix(BASE_LAT + offset, BASE_LNG, 8f, 0f));
@@ -42,7 +42,7 @@ public class TrailRecorderTest {
     @Test
     public void walkingAddsTheDistanceBetweenAcceptedPoints() {
         for (int i = 0; i <= 10; i++) {
-            recorder.addLocation(fix(BASE_LAT + i * 0.0001, BASE_LNG, 5f, 1.4f)); // ~11 m steps
+            recorder.addLocation(fix(BASE_LAT + i * 0.0001, BASE_LNG, 5f, 1.4f)); // passos de ~11 m
         }
 
         assertEquals(111.0, recorder.getDistance(), 3.0);
@@ -52,7 +52,7 @@ public class TrailRecorderTest {
     @Test
     public void inaccurateFixesAreIgnored() {
         recorder.addLocation(fix(BASE_LAT, BASE_LNG, 5f, 1f));
-        recorder.addLocation(fix(BASE_LAT + 0.001, BASE_LNG, 60f, 40f)); // 111 m jump, 60 m accuracy
+        recorder.addLocation(fix(BASE_LAT + 0.001, BASE_LNG, 60f, 40f)); // salto de 111 m, precisão de 60 m
 
         assertEquals(0.0, recorder.getDistance(), 0.0);
         assertEquals(1f, recorder.getMaxSpeed(), 0f);

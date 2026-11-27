@@ -16,7 +16,7 @@ public final class MapIcons {
     private MapIcons() {
     }
 
-    // Map markers only accept bitmaps, so the vector is drawn onto a canvas of its own size
+    // Marcadores do mapa só aceitam bitmap, então o vetor é desenhado num canvas do tamanho dele
     public static BitmapDescriptor fromVector(Context context, @DrawableRes int drawableResId) {
         Drawable drawable = ContextCompat.getDrawable(context, drawableResId);
         if (drawable == null) {

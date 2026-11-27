@@ -35,13 +35,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Trail detail screen: loads one trail with its points by id, draws the route with start/end
- * pins, frames the camera on it and shows the summary. The name can be edited here too.
- * Flow and diagrams: docs/visualizar-trilha.md
+ * Tela Visualizar Trilha: carrega uma trilha com seus pontos pelo id, desenha o percurso com os
+ * pinos de início e fim, enquadra a câmera nele e mostra o resumo. O nome também pode ser editado aqui.
+ * Fluxo e diagramas: docs/visualizar-trilha.md
  */
 public class TrailDetailActivity extends AppCompatActivity {
 
-    /** Id of the trail to show (long). Only the id travels in the Intent; the trail is loaded from the database */
+    /** Id da trilha a exibir (long). Só o id vai no Intent; a trilha é carregada do banco */
     public static final String EXTRA_TRAIL_ID = "com.reynanfc.sistema_gerenciador_trilha.EXTRA_TRAIL_ID";
 
     private static final long NO_ID = -1;
@@ -123,7 +123,7 @@ public class TrailDetailActivity extends AppCompatActivity {
                 getString(settingsPrefs.getMapType().labelResId),
                 getString(settingsPrefs.getNavigationMode().labelResId)));
 
-        // The legend line takes the same color as the route
+        // A linha da legenda recebe a mesma cor do percurso
         Drawable legendLine = ContextCompat.getDrawable(this, R.drawable.legend_line_route);
         if (legendLine != null) {
             legendLine = legendLine.mutate();
@@ -133,7 +133,7 @@ public class TrailDetailActivity extends AppCompatActivity {
         }
     }
 
-    // Same dialog as the list screen; the new name is saved here and shown right away
+    // Mesmo diálogo da lista; o novo nome é salvo aqui e aparece na hora
     private void renameTrail() {
         if (trail == null) {
             return;
@@ -149,7 +149,7 @@ public class TrailDetailActivity extends AppCompatActivity {
                         error -> Toast.makeText(this, R.string.rename_error, Toast.LENGTH_LONG).show()));
     }
 
-    // The map and the trail arrive asynchronously and in any order: draw once both exist
+    // O mapa e a trilha chegam de forma assíncrona e em qualquer ordem: desenha quando os dois existirem
     private void drawRouteWhenReady() {
         if (googleMap == null || trail == null) {
             return;
@@ -171,19 +171,19 @@ public class TrailDetailActivity extends AppCompatActivity {
                 .width(getResources().getDimension(R.dimen.route_width))
                 .geodesic(true));
 
-        // With a single point the start and end pins would overlap: show only the start
+        // Com um único ponto os pinos de início e fim ficariam sobrepostos: mostra só o de início
         addPin(route.get(0), R.drawable.ic_pin_start);
         if (route.size() > 1) {
             addPin(route.get(route.size() - 1), R.drawable.ic_pin_end);
         }
 
-        // newLatLngBounds needs the map to have a size, so wait until it finished loading
+        // newLatLngBounds precisa que o mapa já tenha tamanho, então espera ele terminar de carregar
         googleMap.setOnMapLoadedCallback(() -> frameRoute(route));
     }
 
     /**
-     * Fits the whole route on screen. The map padding reserves the areas covered by the top bar and
-     * the info panel, so the route is framed in the visible part between them.
+     * Enquadra o percurso inteiro na tela. O padding do mapa reserva as áreas cobertas pela barra superior
+     * e pelo painel de informações, então o percurso fica na parte visível entre eles.
      */
     private void frameRoute(List<LatLng> route) {
         View overlay = findViewById(R.id.detail_overlay);
@@ -203,7 +203,7 @@ public class TrailDetailActivity extends AppCompatActivity {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), padding));
     }
 
-    // Blue reads well on the light vector map; on the dark satellite imagery yellow stands out
+    // Azul aparece bem no mapa vetorial claro; na imagem escura do satélite o amarelo se destaca
     private int routeColorRes() {
         return settingsPrefs.getMapType() == SettingsPrefs.MapType.SATELLITE
                 ? R.color.route_satellite : R.color.route_vector;

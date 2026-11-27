@@ -61,10 +61,10 @@ import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs;
 import java.util.ArrayList;
 
 /**
- * Record trail screen: shows the map, asks for the location permission, follows the GPS and
- * feeds every fix into {@link TrailRecorder} (time, speeds, distance, points). Finishing opens the
- * summary sheet and saves the trail with its points through {@link TrailDao}.
- * Flow and diagrams: docs/registrar-trilha.md
+ * Tela Registrar Trilha: mostra o mapa, pede a permissão de localização, acompanha o GPS e
+ * repassa cada posição para o {@link TrailRecorder} (tempo, velocidades, distância, pontos). Ao finalizar,
+ * abre o resumo e salva a trilha com seus pontos pelo {@link TrailDao}.
+ * Fluxo e diagramas: docs/registrar-trilha.md
  */
 public class RecordTrailActivity extends AppCompatActivity {
 
@@ -75,7 +75,7 @@ public class RecordTrailActivity extends AppCompatActivity {
 
     private static final float INITIAL_ZOOM = 17f;
     private static final long TIMER_TICK_MILLIS = 500;
-    /** m/s (~1.8 km/h): below this the GPS bearing is noise */
+    /** m/s (~1,8 km/h): abaixo disso o rumo do GPS é ruído */
     private static final float MIN_SPEED_FOR_BEARING = 0.5f;
 
     private SettingsPrefs settingsPrefs;
@@ -98,7 +98,7 @@ public class RecordTrailActivity extends AppCompatActivity {
     private MaterialButton buttonPause;
     private ImageButton buttonCompass;
 
-    // Leaving after the recording started would lose the trail, so ask first
+    // Sair depois que a gravação começou perderia a trilha, então pergunta antes
     private final OnBackPressedCallback backCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
@@ -110,7 +110,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         }
     };
 
-    // Refreshes the timer text while the screen is visible (started in onResume, removed in onPause)
+    // Atualiza o texto do cronômetro enquanto a tela está visível (iniciado no onResume, removido no onPause)
     private final Handler timerHandler = new Handler(Looper.getMainLooper());
     private final Runnable timerTick = new Runnable() {
         @Override
@@ -120,7 +120,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         }
     };
 
-    // Must be registered before the Activity is started, so it is a field and not created on demand
+    // Precisa ser registrado antes de a Activity iniciar, por isso é um campo e não é criado na hora
     private final ActivityResultLauncher<String[]> locationPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
                     result -> onLocationPermissionResult());
@@ -163,7 +163,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         checkLocationPermission();
     }
 
-    // GPS only runs while the screen is visible; the permission result arrives before onResume
+    // O GPS só roda com a tela visível; o resultado da permissão chega antes do onResume
     @Override
     protected void onResume() {
         super.onResume();
@@ -191,7 +191,7 @@ public class RecordTrailActivity extends AppCompatActivity {
             return;
         }
 
-        // Freeze the numbers while the user types the name; cancelling the sheet resumes
+        // Congela os números enquanto o usuário digita o nome; fechar o sheet retoma a gravação
         boolean wasRunning = recorder.isRunning();
         recorder.pause();
         renderRecordingState();
@@ -200,7 +200,7 @@ public class RecordTrailActivity extends AppCompatActivity {
 
     private void showFinishSheet(boolean wasRunning, long endTime) {
         BottomSheetDialog sheet = new BottomSheetDialog(this);
-        // null parent: the dialog becomes the parent when the view is set on it
+        // Pai null: o diálogo vira o pai quando a view é colocada nele
         View content = getLayoutInflater().inflate(R.layout.bottom_sheet_finish_trail, null);
         sheet.setContentView(content);
         sheet.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -211,7 +211,7 @@ public class RecordTrailActivity extends AppCompatActivity {
 
         ((TextView) content.findViewById(R.id.text_finish_start)).setText(Formatters.dateTime(recorder.getStartTime()));
         ((TextView) content.findViewById(R.id.text_finish_end)).setText(Formatters.dateTime(endTime));
-        // Duration = end - start (what the list and detail show); the timer above shows moving time only
+        // Duração = fim - início (o que a lista e a visualização mostram); o cronômetro mostra só o tempo em movimento
         ((TextView) content.findViewById(R.id.text_finish_duration)).setText(
                 Formatters.duration(endTime - recorder.getStartTime()));
         ((TextView) content.findViewById(R.id.text_finish_distance)).setText(
@@ -246,7 +246,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         sheet.show();
     }
 
-    /** Distance over moving time (pauses excluded), in m/s */
+    /** Distância dividida pelo tempo em movimento (sem as pausas), em m/s */
     private static double averageSpeed(double distanceMeters, long elapsedMillis) {
         return elapsedMillis > 0 ? distanceMeters / (elapsedMillis / 1000.0) : 0;
     }
@@ -258,7 +258,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         return trail;
     }
 
-    // The insert of hundreds of points runs on a background thread so the UI never freezes
+    // A inserção de centenas de pontos roda numa thread de fundo para a interface nunca travar
     private void saveTrail(Trail trail, BottomSheetDialog sheet, MaterialButton buttonSave) {
         TrailDao trailDao = new TrailDao(this);
         Async.run(() -> trailDao.insert(trail),
@@ -291,7 +291,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         renderRecordingState();
     }
 
-    // Status pill and Pause/Resume button; before the first GPS fix there is nothing to pause
+    // Selo de status e botão Pausar/Retomar; antes da primeira posição do GPS não há o que pausar
     private void renderRecordingState() {
         if (!recorder.isStarted()) {
             setRecordingStatus(R.string.record_waiting_gps, R.drawable.dot_waiting);
@@ -332,7 +332,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         }
     }
 
-    // Fine and coarse are requested together: since Android 12 the user may grant only the approximate one
+    // FINE e COARSE são pedidas juntas: desde o Android 12 o usuário pode conceder só a aproximada
     private void onLocationPermissionResult() {
         if (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
             onLocationPermissionGranted();
@@ -350,7 +350,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         checkDeviceLocation();
     }
 
-    // If the device location is off, Play Services shows a dialog that turns it on with one tap
+    // Se a localização do aparelho estiver desligada, o Play Services mostra um diálogo que liga com um toque
     private void checkDeviceLocation() {
         locationTracker.checkLocationSettings().addOnFailureListener(this, e -> {
             if (e instanceof ResolvableApiException) {
@@ -368,7 +368,7 @@ public class RecordTrailActivity extends AppCompatActivity {
     }
 
     private void onLocation(Location location) {
-        // Recording starts with the first fix, so the start time and the first point match
+        // A gravação começa na primeira posição, para a hora de início e o primeiro ponto coincidirem
         if (!recorder.isStarted()) {
             recorder.start();
             renderRecordingState();
@@ -394,9 +394,9 @@ public class RecordTrailActivity extends AppCompatActivity {
     }
 
     /**
-     * Keeps the user in the center. North Up keeps bearing 0; Course Up turns the map so the
-     * walking direction points up. The bearing is only trusted while moving, because standing
-     * still makes the GPS heading jump around.
+     * Mantém o usuário no centro. North Up mantém o rumo 0; Course Up gira o mapa para que a
+     * direção da caminhada fique para cima. O rumo só é usado em movimento, porque parado
+     * o rumo do GPS fica pulando.
      */
     private void followCamera(LatLng position, Location location) {
         CameraPosition current = googleMap.getCameraPosition();
@@ -416,7 +416,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         return settingsPrefs.getNavigationMode() == SettingsPrefs.NavigationMode.COURSE_UP;
     }
 
-    // Compass: back to north (Course Up turns again on the next fix while walking)
+    // Bússola: volta para o norte (no Course Up o mapa gira de novo na próxima posição em movimento)
     private void resetBearing() {
         if (googleMap == null) {
             return;
@@ -425,7 +425,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(north));
     }
 
-    // Radius = GPS accuracy in meters: the real position is inside the circle with ~68% probability
+    // Raio = precisão do GPS em metros: a posição real está dentro do círculo com ~68% de probabilidade
     private void updateAccuracyCircle(LatLng center, float accuracyMeters) {
         if (accuracyCircle == null) {
             accuracyCircle = googleMap.addCircle(new CircleOptions()
@@ -440,7 +440,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         }
     }
 
-    // One marker for the whole screen: created on the first fix and only moved afterwards
+    // Um único marcador para a tela toda: criado na primeira posição e depois só movido
     private void updatePositionMarker(LatLng position, Location location) {
         if (positionMarker == null) {
             positionMarker = googleMap.addMarker(new MarkerOptions()
@@ -452,8 +452,8 @@ public class RecordTrailActivity extends AppCompatActivity {
             positionMarker.setPosition(position);
         }
 
-        // Flat marker: rotation is relative to north, so the arrow keeps pointing the right way
-        // even when the map rotates (Course Up). Standing still has no bearing, so keep the last one
+        // Marcador flat: a rotação é relativa ao norte, então a seta continua apontando o rumo certo
+        // mesmo quando o mapa gira (Course Up). Parado não há rumo, então mantém o último
         if (positionMarker != null && location.hasBearing()) {
             positionMarker.setRotation(location.getBearing());
         }
@@ -462,8 +462,8 @@ public class RecordTrailActivity extends AppCompatActivity {
     private void onLocationPermissionDenied() {
         chipAccuracy.setText(R.string.record_accuracy_no_permission);
 
-        // After "deny" twice (or "don't ask again") Android stops showing the system dialog,
-        // so the only way back is the app settings screen
+        // Depois de duas recusas (ou "não perguntar novamente") o Android para de mostrar o diálogo dele,
+        // então o único caminho é a tela de configurações do app
         boolean permanentlyDenied =
                 !shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION);
 
@@ -513,10 +513,10 @@ public class RecordTrailActivity extends AppCompatActivity {
         UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setCompassEnabled(false);
         uiSettings.setMapToolbarEnabled(false);
-        // The orientation comes from the North Up / Course Up setting, not from two-finger rotation
+        // A orientação vem da configuração North Up / Course Up, não da rotação com dois dedos
         uiSettings.setRotateGesturesEnabled(false);
 
-        // The compass needle points to the real north: rotate the icon against the map bearing
+        // A agulha da bússola aponta o norte real: gira o ícone no sentido contrário ao rumo do mapa
         googleMap.setOnCameraMoveListener(() ->
                 buttonCompass.setRotation(-googleMap.getCameraPosition().bearing));
     }

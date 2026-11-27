@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Shows the trails as cards. The adapter only binds data and forwards clicks: opening, renaming
- * and deleting are decided by the Activity through {@link Listener}.
+ * Mostra as trilhas como cartões. O adapter só liga os dados e repassa os cliques: abrir, renomear
+ * e apagar são decididos pela Activity através do {@link Listener}.
  */
 public class TrailAdapter extends RecyclerView.Adapter<TrailAdapter.TrailViewHolder> {
 
@@ -36,7 +36,7 @@ public class TrailAdapter extends RecyclerView.Adapter<TrailAdapter.TrailViewHol
         this.listener = listener;
     }
 
-    @SuppressWarnings("NotifyDataSetChanged") // the whole list is reloaded from the database
+    @SuppressWarnings("NotifyDataSetChanged") // a lista inteira é recarregada do banco
     public void submit(List<Trail> newTrails) {
         trails.clear();
         trails.addAll(newTrails);
@@ -60,7 +60,7 @@ public class TrailAdapter extends RecyclerView.Adapter<TrailAdapter.TrailViewHol
         return trails.size();
     }
 
-    // Holds the item views so findViewById runs once per card, not on every scroll
+    // Guarda as views do item para o findViewById rodar uma vez por cartão, e não a cada rolagem
     class TrailViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView textName;

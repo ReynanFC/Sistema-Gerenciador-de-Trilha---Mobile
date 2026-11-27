@@ -30,7 +30,7 @@ public class TrailDaoTest {
     private DbHelper dbHelper;
     private TrailDao trailDao;
 
-    // In-memory database: the tests never touch the trails saved in the real app database
+    // Banco em memória: os testes nunca mexem nas trilhas salvas no banco real do app
     @Before
     public void setUp() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -58,7 +58,7 @@ public class TrailDaoTest {
         assertTrue("1000 points took " + elapsed + " ms", elapsed < 2000);
     }
 
-    // SQLite stores NaN as NULL, so the last point violates NOT NULL after 999 successful inserts
+    // O SQLite grava NaN como NULL, então o último ponto viola o NOT NULL depois de 999 inserts bem-sucedidos
     @Test
     public void failureInTheMiddleSavesNothing() {
         Trail trail = newTrail(999);

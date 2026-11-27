@@ -3,7 +3,7 @@ package com.reynanfc.sistema_gerenciador_trilha.model;
 import java.util.ArrayList;
 import java.util.List;
 
-// Times in epoch milliseconds, speeds in m/s and distance in meters (converted only for display)
+// Tempos em epoch milissegundos, velocidades em m/s e distância em metros (convertidos só para exibir)
 public class Trail {
 
     private long id;

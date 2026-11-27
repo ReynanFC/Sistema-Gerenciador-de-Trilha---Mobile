@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Converts the stored units (millis, m/s, meters) into the texts shown on screen.
- * Values are only converted here, at display time; the model and the database keep SI units.
+ * Converte as unidades guardadas (milissegundos, m/s, metros) nos textos mostrados na tela.
+ * Os valores só são convertidos aqui, na hora de exibir; o modelo e o banco mantêm unidades SI.
  */
 public final class Formatters {
 
@@ -23,7 +23,7 @@ public final class Formatters {
                 totalSeconds / 3600, (totalSeconds % 3600) / 60, totalSeconds % 60);
     }
 
-    /** Compact duration for the list chips: "42 min" or "1h 12min" */
+    /** Duração compacta para os chips da lista: "42 min" ou "1h 12min" */
     public static String shortDuration(long millis) {
         long totalMinutes = Math.max(0, millis) / 60_000;
         if (totalMinutes < 60) {
@@ -32,12 +32,12 @@ public final class Formatters {
         return String.format(PT_BR, "%dh %02dmin", totalMinutes / 60, totalMinutes % 60);
     }
 
-    /** 1.44 m/s → "5,2" (km/h, unit shown separately) */
+    /** 1,44 m/s → "5,2" (km/h, unidade mostrada à parte) */
     public static String speedKmh(double metersPerSecond) {
         return String.format(PT_BR, "%.1f", metersPerSecond * MPS_TO_KMH);
     }
 
-    /** 3480 m → "3,48" (km, unit shown separately) */
+    /** 3480 m → "3,48" (km, unidade mostrada à parte) */
     public static String distanceKm(double meters) {
         return String.format(PT_BR, "%.2f", meters / 1000);
     }

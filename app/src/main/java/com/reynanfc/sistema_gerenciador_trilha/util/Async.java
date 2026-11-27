@@ -9,8 +9,8 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 /**
- * Runs database work off the UI thread and delivers the result back on it.
- * A single background thread keeps the writes in order (no two transactions at the same time).
+ * Executa o trabalho de banco fora da UI thread e entrega o resultado de volta nela.
+ * Uma única thread de fundo mantém as gravações em ordem (nunca duas transações ao mesmo tempo).
  */
 public final class Async {
 
