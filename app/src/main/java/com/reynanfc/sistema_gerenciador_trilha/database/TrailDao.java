@@ -3,6 +3,7 @@ package com.reynanfc.sistema_gerenciador_trilha.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.Nullable;
@@ -116,6 +117,43 @@ public class TrailDao {
                 cursor.getFloat(cursor.getColumnIndexOrThrow(DbHelper.COLUMN_POINT_ACCURACY)),
                 cursor.getLong(cursor.getColumnIndexOrThrow(DbHelper.COLUMN_POINT_TIMESTAMP))
         );
+    }
+
+    public long count() {
+        return DatabaseUtils.queryNumEntries(dbHelper.getReadableDatabase(), DbHelper.TABLE_TRAIL);
+    }
+
+    /** @return the number of renamed trails: 1, or 0 if no trail has this id */
+    public int rename(long trailId, String newName) {
+        ContentValues values = new ContentValues();
+        values.put(DbHelper.COLUMN_TRAIL_NAME, newName);
+        return dbHelper.getWritableDatabase().update(
+                DbHelper.TABLE_TRAIL, values,
+                DbHelper.COLUMN_TRAIL_ID + " = ?", new String[]{String.valueOf(trailId)});
+    }
+
+    // The delete methods only touch the trail table: ON DELETE CASCADE removes the points
+    public int delete(long trailId) {
+        return dbHelper.getWritableDatabase().delete(
+                DbHelper.TABLE_TRAIL,
+                DbHelper.COLUMN_TRAIL_ID + " = ?", new String[]{String.valueOf(trailId)});
+    }
+
+    /**
+     * Deletes the trails that started between the two instants, both inclusive (SQL BETWEEN).
+     * The screen converts the picked dates to the start of the first day and the end of the last one.
+     *
+     * @return the number of deleted trails
+     */
+    public int deleteBetween(long fromMillis, long toMillis) {
+        return dbHelper.getWritableDatabase().delete(
+                DbHelper.TABLE_TRAIL,
+                DbHelper.COLUMN_TRAIL_START_TIME + " BETWEEN ? AND ?",
+                new String[]{String.valueOf(fromMillis), String.valueOf(toMillis)});
+    }
+
+    public int deleteAll() {
+        return dbHelper.getWritableDatabase().delete(DbHelper.TABLE_TRAIL, "1", null);
     }
 
     private ContentValues toContentValues(Trail trail) {
