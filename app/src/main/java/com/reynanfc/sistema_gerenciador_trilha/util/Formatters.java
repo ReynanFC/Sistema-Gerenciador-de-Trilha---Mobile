@@ -10,7 +10,7 @@ import java.util.Locale;
  */
 public final class Formatters {
 
-    private static final Locale PT_BR = new Locale("pt", "BR");
+    private static final Locale PT_BR = Locale.forLanguageTag("pt-BR");
     private static final double MPS_TO_KMH = 3.6;
 
     private Formatters() {
