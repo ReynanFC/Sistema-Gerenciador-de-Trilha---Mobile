@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -40,15 +41,24 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.reynanfc.sistema_gerenciador_trilha.R;
+import com.reynanfc.sistema_gerenciador_trilha.database.TrailDao;
 import com.reynanfc.sistema_gerenciador_trilha.location.LocationTracker;
 import com.reynanfc.sistema_gerenciador_trilha.location.TrailRecorder;
+import com.reynanfc.sistema_gerenciador_trilha.model.Trail;
+import com.reynanfc.sistema_gerenciador_trilha.util.Async;
 import com.reynanfc.sistema_gerenciador_trilha.util.Formatters;
 import com.reynanfc.sistema_gerenciador_trilha.util.MapIcons;
 import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs;
+
+import java.util.ArrayList;
 
 public class RecordTrailActivity extends AppCompatActivity {
 
@@ -81,6 +91,18 @@ public class RecordTrailActivity extends AppCompatActivity {
     private TextView textRecordingStatus;
     private MaterialButton buttonPause;
     private ImageButton buttonCompass;
+
+    // Leaving after the recording started would lose the trail, so ask first
+    private final OnBackPressedCallback backCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            if (recorder.isStarted()) {
+                confirmDiscard();
+            } else {
+                finish();
+            }
+        }
+    };
 
     // Refreshes the timer text while the screen is visible (started in onResume, removed in onPause)
     private final Handler timerHandler = new Handler(Looper.getMainLooper());
@@ -123,7 +145,9 @@ public class RecordTrailActivity extends AppCompatActivity {
         locationTracker = new LocationTracker(this, this::onLocation);
 
         setupWindowInsets();
-        findViewById(R.id.button_back).setOnClickListener(v -> finish());
+        findViewById(R.id.button_back).setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        getOnBackPressedDispatcher().addCallback(this, backCallback);
+        findViewById(R.id.button_finish).setOnClickListener(v -> onFinishClicked());
         showCurrentSettings();
         buttonPause.setOnClickListener(v -> togglePause());
         buttonCompass.setOnClickListener(v -> resetBearing());
@@ -148,6 +172,105 @@ public class RecordTrailActivity extends AppCompatActivity {
         super.onPause();
         locationTracker.stop();
         timerHandler.removeCallbacks(timerTick);
+    }
+
+    private void onFinishClicked() {
+        if (recorder.getPoints().isEmpty()) {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.finish_no_points_title)
+                    .setMessage(R.string.finish_no_points_message)
+                    .setNegativeButton(R.string.finish_discard, (d, which) -> finish())
+                    .setPositiveButton(R.string.finish_keep_recording, null)
+                    .show();
+            return;
+        }
+
+        // Freeze the numbers while the user types the name; cancelling the sheet resumes
+        boolean wasRunning = recorder.isRunning();
+        recorder.pause();
+        renderRecordingState();
+        showFinishSheet(wasRunning, System.currentTimeMillis());
+    }
+
+    private void showFinishSheet(boolean wasRunning, long endTime) {
+        BottomSheetDialog sheet = new BottomSheetDialog(this);
+        View content = getLayoutInflater().inflate(R.layout.bottom_sheet_finish_trail, null);
+        sheet.setContentView(content);
+        sheet.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
+        sheet.getBehavior().setSkipCollapsed(true);
+
+        long elapsed = recorder.getElapsedMillis();
+        double averageSpeed = averageSpeed(recorder.getDistance(), elapsed);
+
+        ((TextView) content.findViewById(R.id.text_finish_start)).setText(Formatters.dateTime(recorder.getStartTime()));
+        ((TextView) content.findViewById(R.id.text_finish_end)).setText(Formatters.dateTime(endTime));
+        ((TextView) content.findViewById(R.id.text_finish_duration)).setText(Formatters.duration(elapsed));
+        ((TextView) content.findViewById(R.id.text_finish_distance)).setText(
+                getString(R.string.value_km, Formatters.distanceKm(recorder.getDistance())));
+        ((TextView) content.findViewById(R.id.text_finish_average_speed)).setText(
+                getString(R.string.value_kmh, Formatters.speedKmh(averageSpeed)));
+        ((TextView) content.findViewById(R.id.text_finish_max_speed)).setText(
+                getString(R.string.value_kmh, Formatters.speedKmh(recorder.getMaxSpeed())));
+
+        TextInputLayout layoutName = content.findViewById(R.id.layout_trail_name);
+        TextInputEditText editName = content.findViewById(R.id.edit_trail_name);
+        MaterialButton buttonSave = content.findViewById(R.id.button_save_trail);
+
+        sheet.setOnCancelListener(d -> {
+            if (wasRunning) {
+                recorder.resume();
+                renderRecordingState();
+            }
+        });
+        content.findViewById(R.id.button_discard).setOnClickListener(v -> confirmDiscard());
+        buttonSave.setOnClickListener(v -> {
+            String name = editName.getText() == null ? "" : editName.getText().toString().trim();
+            if (name.isEmpty()) {
+                layoutName.setError(getString(R.string.finish_name_required));
+                return;
+            }
+            layoutName.setError(null);
+            buttonSave.setEnabled(false);
+            saveTrail(buildTrail(name, endTime, averageSpeed), sheet, buttonSave);
+        });
+
+        sheet.show();
+    }
+
+    /** Distance over moving time (pauses excluded), in m/s */
+    private static double averageSpeed(double distanceMeters, long elapsedMillis) {
+        return elapsedMillis > 0 ? distanceMeters / (elapsedMillis / 1000.0) : 0;
+    }
+
+    private Trail buildTrail(String name, long endTime, double averageSpeed) {
+        Trail trail = new Trail(name, recorder.getStartTime(), endTime,
+                averageSpeed, recorder.getMaxSpeed(), recorder.getDistance());
+        trail.setPoints(new ArrayList<>(recorder.getPoints()));
+        return trail;
+    }
+
+    // The insert of hundreds of points runs on a background thread so the UI never freezes
+    private void saveTrail(Trail trail, BottomSheetDialog sheet, MaterialButton buttonSave) {
+        TrailDao trailDao = new TrailDao(this);
+        Async.run(() -> trailDao.insert(trail),
+                trailId -> {
+                    Toast.makeText(this, R.string.finish_saved, Toast.LENGTH_SHORT).show();
+                    sheet.dismiss();
+                    finish();
+                },
+                error -> {
+                    buttonSave.setEnabled(true);
+                    Toast.makeText(this, R.string.finish_save_error, Toast.LENGTH_LONG).show();
+                });
+    }
+
+    private void confirmDiscard() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.finish_discard_title)
+                .setMessage(R.string.finish_discard_message)
+                .setNegativeButton(R.string.action_cancel, null)
+                .setPositiveButton(R.string.finish_discard, (d, which) -> finish())
+                .show();
     }
 
     private void togglePause() {
