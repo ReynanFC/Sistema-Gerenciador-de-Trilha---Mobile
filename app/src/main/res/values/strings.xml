@@ -143,4 +143,7 @@
     </plurals>
     <string name="delete_nothing">Nenhuma trilha para apagar</string>
     <string name="delete_error">Não foi possível apagar as trilhas</string>
+
+    <!-- Trail detail screen -->
+    <string name="detail_not_found">Trilha não encontrada</string>
 </resources>
