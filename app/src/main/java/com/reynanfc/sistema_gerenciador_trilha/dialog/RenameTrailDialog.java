@@ -17,8 +17,8 @@ import com.reynanfc.sistema_gerenciador_trilha.util.Formatters;
 import java.util.function.Consumer;
 
 /**
- * "Renomear trilha" dialog, shared by the list and the detail screen.
- * It only collects and validates the new name; saving it is up to the caller (the DAO is not used here).
+ * Diálogo "Renomear trilha", compartilhado pela lista e pela tela Visualizar.
+ * Só coleta e valida o novo nome; salvar fica a cargo de quem chama (o DAO não é usado aqui).
  */
 public final class RenameTrailDialog {
 
@@ -26,7 +26,7 @@ public final class RenameTrailDialog {
     }
 
     public static void show(Context context, Trail trail, Consumer<String> onRenamed) {
-        // null parent: the dialog becomes the parent when the view is set on it
+        // Pai null: o diálogo vira o pai quando a view é colocada nele
         View content = LayoutInflater.from(context).inflate(R.layout.dialog_rename_trail, null);
         TextView textDate = content.findViewById(R.id.text_rename_date);
         TextInputLayout layoutName = content.findViewById(R.id.layout_rename);
@@ -42,7 +42,7 @@ public final class RenameTrailDialog {
                 .setPositiveButton(R.string.action_save, null)
                 .show();
 
-        // Set after show(): the default positive button always closes the dialog, even with an empty name
+        // Definido depois do show(): o botão positivo padrão sempre fecha o diálogo, mesmo com o nome vazio
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String name = editName.getText() == null ? "" : editName.getText().toString().trim();
             if (name.isEmpty()) {

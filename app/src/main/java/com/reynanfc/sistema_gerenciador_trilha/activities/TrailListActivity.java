@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
- * Trail list screen: loads every trail from the database (newest first) and lets the user open,
- * rename or delete them (one, a date range or all). Reloads in onResume to reflect changes.
- * Flow and diagrams: docs/consultar-trilhas.md
+ * Tela Consultar Trilhas: carrega todas as trilhas do banco (mais recentes primeiro) e permite abrir,
+ * renomear ou apagar (uma, por intervalo de datas ou todas). Recarrega no onResume para refletir mudanças.
+ * Fluxo e diagramas: docs/consultar-trilhas.md
  */
 public class TrailListActivity extends AppCompatActivity implements TrailAdapter.Listener {
 
@@ -56,7 +56,7 @@ public class TrailListActivity extends AppCompatActivity implements TrailAdapter
                 startActivity(new Intent(this, RecordTrailActivity.class)));
     }
 
-    // onResume (not onCreate): coming back from recording or viewing a trail must show the changes
+    // onResume (e não onCreate): ao voltar da gravação ou da visualização, a lista precisa mostrar as mudanças
     @Override
     protected void onResume() {
         super.onResume();
@@ -135,7 +135,7 @@ public class TrailListActivity extends AppCompatActivity implements TrailAdapter
         DeleteTrailsDialog.show(this, null, trails.size(), deleteCallbacks);
     }
 
-    // Each mode maps to one DAO method; the points go with the trails through ON DELETE CASCADE
+    // Cada modo corresponde a um método do DAO; os pontos vão junto com as trilhas pelo ON DELETE CASCADE
     private final DeleteTrailsDialog.Callbacks deleteCallbacks = new DeleteTrailsDialog.Callbacks() {
         @Override
         public void deleteOne(Trail trail) {

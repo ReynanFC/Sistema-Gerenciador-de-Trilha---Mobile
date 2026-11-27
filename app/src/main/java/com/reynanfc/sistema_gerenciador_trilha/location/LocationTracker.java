@@ -18,8 +18,8 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.Task;
 
 /**
- * Delivers GPS fixes to a listener while started. The screen decides when to start and stop
- * (onResume/onPause), so the GPS is off whenever the screen is not visible.
+ * Entrega as posições do GPS a um listener enquanto estiver ligado. A tela decide quando ligar e
+ * desligar (onResume/onPause), então o GPS fica desligado sempre que a tela não está visível.
  */
 public class LocationTracker {
 
@@ -40,7 +40,7 @@ public class LocationTracker {
         this.context = context.getApplicationContext();
         fusedClient = LocationServices.getFusedLocationProviderClient(this.context);
 
-        // High accuracy uses the GPS chip; a fix every 1-2 s is enough detail for walking
+        // Alta precisão usa o chip de GPS; uma posição a cada 1-2 s é detalhe suficiente para caminhada
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, UPDATE_INTERVAL_MILLIS)
                 .setMinUpdateIntervalMillis(FASTEST_INTERVAL_MILLIS)
                 .build();
@@ -55,7 +55,7 @@ public class LocationTracker {
         };
     }
 
-    /** Fails with a ResolvableApiException when the device location is off; the screen can ask to turn it on. */
+    /** Falha com ResolvableApiException quando a localização do aparelho está desligada; a tela pode pedir para ligar. */
     public Task<LocationSettingsResponse> checkLocationSettings() {
         LocationSettingsRequest request = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest)
@@ -63,7 +63,7 @@ public class LocationTracker {
         return LocationServices.getSettingsClient(context).checkLocationSettings(request);
     }
 
-    // Callers only start after the location permission was granted
+    // Quem chama só liga depois que a permissão de localização foi concedida
     @SuppressLint("MissingPermission")
     public void start() {
         if (running) {

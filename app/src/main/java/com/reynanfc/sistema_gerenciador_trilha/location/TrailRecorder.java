@@ -11,22 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * State of the trail being recorded, independent of any View: elapsed time with pauses, speeds,
- * distance and the accepted points.
- * Lives in a ViewModel so it survives screen rotation.
+ * Estado da trilha em gravação, independente de qualquer View: tempo decorrido com pausas,
+ * velocidades, distância e os pontos aceitos.
+ * Fica dentro de um ViewModel para sobreviver à rotação de tela.
  *
- * Time uses SystemClock.elapsedRealtime(): it only moves forward, even if the user changes
- * the phone clock. The wall clock (System.currentTimeMillis) is used only for the start/end
- * dates saved in the database.
+ * O tempo usa SystemClock.elapsedRealtime(): ele só anda para frente, mesmo se o usuário mudar
+ * o relógio do celular. O relógio do sistema (System.currentTimeMillis) é usado só para as datas
+ * de início e fim salvas no banco.
  */
 public class TrailRecorder {
 
     private static final long NOT_RUNNING = -1;
 
-    /** Fixes less accurate than this (meters) do not count for max speed, distance or points */
+    /** Leituras menos precisas que isto (metros) não contam para velocidade máxima, distância nem pontos */
     public static final float MAX_ACCEPTED_ACCURACY = 25f;
 
-    /** Smallest movement (meters) that counts as distance, so GPS jitter does not add up while standing */
+    /** Menor deslocamento (metros) que conta como distância, para a oscilação do GPS não somar com o usuário parado */
     private static final float MIN_STEP_METERS = 5f;
 
     private boolean started;
@@ -70,19 +70,19 @@ public class TrailRecorder {
             return;
         }
         runningSince = SystemClock.elapsedRealtime();
-        // What the user walked while paused must not count: the next fix starts a new segment
+        // O que o usuário andou durante a pausa não pode contar: a próxima posição começa um novo trecho
         lastAccepted = null;
     }
 
-    /** Feeds a GPS fix into the recording. Paused fixes still update the current speed only. */
+    /** Alimenta a gravação com uma posição do GPS. Durante a pausa, só a velocidade atual é atualizada. */
     public void addLocation(Location location) {
-        // Not every fix carries a speed (e.g. network location); treat it as standing still
+        // Nem toda posição traz velocidade (ex.: localização pela rede); nesse caso considera parado
         currentSpeed = location.hasSpeed() ? location.getSpeed() : 0f;
 
         if (!isRunning() || location.getAccuracy() > MAX_ACCEPTED_ACCURACY) {
             return;
         }
-        // Inaccurate fixes are skipped above because they produce speed spikes and fake distance
+        // Leituras imprecisas são descartadas acima porque geram picos de velocidade e distância falsa
         maxSpeed = Math.max(maxSpeed, currentSpeed);
 
         if (lastAccepted == null) {
@@ -90,8 +90,8 @@ public class TrailRecorder {
             return;
         }
 
-        // A fix only counts once we moved more than its own error radius (and at least MIN_STEP),
-        // otherwise standing still would slowly add distance from the GPS wandering around
+        // Uma posição só conta depois de andar mais que a própria margem de erro (e pelo menos MIN_STEP),
+        // senão, parado, a oscilação do GPS iria somando distância aos poucos
         float step = lastAccepted.distanceTo(location);
         if (step >= Math.max(MIN_STEP_METERS, location.getAccuracy())) {
             distance += step;
@@ -105,12 +105,12 @@ public class TrailRecorder {
         lastAccepted = location;
     }
 
-    /** Meters */
+    /** Metros */
     public double getDistance() {
         return distance;
     }
 
-    /** Accepted points in recording order, to be saved with the trail */
+    /** Pontos aceitos na ordem da gravação, para serem salvos com a trilha */
     public List<TrackPoint> getPoints() {
         return points;
     }
@@ -125,13 +125,13 @@ public class TrailRecorder {
         return maxSpeed;
     }
 
-    /** Recorded time without the pauses */
+    /** Tempo gravado, sem as pausas */
     public long getElapsedMillis() {
         long current = isRunning() ? SystemClock.elapsedRealtime() - runningSince : 0;
         return accumulatedMillis + current;
     }
 
-    /** Wall clock time of the start, in epoch millis */
+    /** Data/hora do início pelo relógio do celular, em epoch millis */
     public long getStartTime() {
         return startTime;
     }

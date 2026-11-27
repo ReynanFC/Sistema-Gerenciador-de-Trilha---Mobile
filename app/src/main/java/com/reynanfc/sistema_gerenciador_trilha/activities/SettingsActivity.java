@@ -42,7 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
         settingsPrefs = new SettingsPrefs(this);
         selectedMapType = settingsPrefs.getMapType();
         selectedNavigationMode = settingsPrefs.getNavigationMode();
-        // After a rotation, keep what was picked but not saved yet
+        // Depois de uma rotação, mantém o que foi escolhido mas ainda não salvo
         if (savedInstanceState != null) {
             selectedMapType = MapType.valueOf(
                     savedInstanceState.getString(STATE_MAP_TYPE, selectedMapType.name()));
