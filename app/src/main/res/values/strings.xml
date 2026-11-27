@@ -43,6 +43,7 @@
     <!-- Record trail screen -->
     <string name="record_recording">Gravando</string>
     <string name="record_paused">Pausado</string>
+    <string name="record_waiting_gps">Aguardando GPS</string>
     <string name="record_time">Tempo</string>
     <string name="record_speed">Velocidade</string>
     <string name="record_max_speed">Vel. máx.</string>
