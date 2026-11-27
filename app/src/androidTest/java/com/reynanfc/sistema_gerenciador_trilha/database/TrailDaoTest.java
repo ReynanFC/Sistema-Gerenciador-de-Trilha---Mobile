@@ -113,6 +113,65 @@ public class TrailDaoTest {
         assertNull(trailDao.findById(42));
     }
 
+    @Test
+    public void renameChangesOnlyTheName() {
+        long trailId = trailDao.insert(newTrail(2));
+
+        assertEquals(1, trailDao.rename(trailId, "Renamed"));
+
+        Trail found = trailDao.findById(trailId);
+        assertNotNull(found);
+        assertEquals("Renamed", found.getName());
+        assertEquals(2, found.getPoints().size());
+    }
+
+    @Test
+    public void deleteRemovesTrailAndItsPoints() {
+        long deletedId = trailDao.insert(newTrail(5));
+        long keptId = trailDao.insert(newTrail(3));
+
+        assertEquals(1, trailDao.delete(deletedId));
+
+        assertNull(trailDao.findById(deletedId));
+        assertNotNull(trailDao.findById(keptId));
+        assertEquals(3, countRows(DbHelper.TABLE_TRACK_POINT));
+    }
+
+    @Test
+    public void deleteBetweenIncludesBothLimits() {
+        long before = insertTrailStartingAt(999);
+        long atStart = insertTrailStartingAt(1000);
+        long inside = insertTrailStartingAt(1500);
+        long atEnd = insertTrailStartingAt(2000);
+        long after = insertTrailStartingAt(2001);
+
+        assertEquals(3, trailDao.deleteBetween(1000, 2000));
+
+        assertNotNull(trailDao.findById(before));
+        assertNull(trailDao.findById(atStart));
+        assertNull(trailDao.findById(inside));
+        assertNull(trailDao.findById(atEnd));
+        assertNotNull(trailDao.findById(after));
+    }
+
+    @Test
+    public void deleteAllEmptiesBothTables() {
+        trailDao.insert(newTrail(4));
+        trailDao.insert(newTrail(4));
+        assertEquals(2, trailDao.count());
+
+        assertEquals(2, trailDao.deleteAll());
+
+        assertEquals(0, trailDao.count());
+        assertEquals(0, countRows(DbHelper.TABLE_TRACK_POINT));
+    }
+
+    private long insertTrailStartingAt(long startTime) {
+        Trail trail = newTrail(1);
+        trail.setStartTime(startTime);
+        return trailDao.insert(trail);
+    }
+
     private Trail newTrail(int pointCount) {
         List<TrackPoint> points = new ArrayList<>();
         for (int i = 0; i < pointCount; i++) {
