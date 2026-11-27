@@ -48,12 +48,12 @@ sequenceDiagram
 |---|---|
 | `Listener` | `onOpen`, `onRename`, `onDelete`: implementados pela Activity |
 | `submit(lista)` | Troca a lista e redesenha |
-| `onCreateViewHolder` | Infla `item_trail.xml` |
+| `onCreateViewHolder` | Infla `item_trail.xml` com `ItemTrailBinding.inflate` |
 | `onBindViewHolder` / `TrailViewHolder.bind` | Nome, data/hora, distância e duração formatados; liga os 3 cliques |
 
-O **ViewHolder** guarda as referências das views do cartão, então o `findViewById` roda uma vez por cartão e não a
-cada rolagem. O adapter **não decide** o que um clique faz: só avisa a Activity. Assim ele não depende de banco nem
-de navegação.
+O **ViewHolder** guarda o `ItemTrailBinding` do cartão (View Binding), criado uma vez no `onCreateViewHolder` e
+reaproveitado quando o cartão volta na rolagem. O adapter **não decide** o que um clique faz: só avisa a Activity.
+Assim ele não depende de banco nem de navegação.
 
 ---
 

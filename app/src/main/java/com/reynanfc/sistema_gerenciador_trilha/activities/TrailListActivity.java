@@ -3,17 +3,15 @@ package com.reynanfc.sistema_gerenciador_trilha.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.reynanfc.sistema_gerenciador_trilha.R;
 import com.reynanfc.sistema_gerenciador_trilha.adapter.TrailAdapter;
 import com.reynanfc.sistema_gerenciador_trilha.database.TrailDao;
+import com.reynanfc.sistema_gerenciador_trilha.databinding.ActivityTrailListBinding;
 import com.reynanfc.sistema_gerenciador_trilha.dialog.DeleteTrailsDialog;
 import com.reynanfc.sistema_gerenciador_trilha.dialog.RenameTrailDialog;
 import com.reynanfc.sistema_gerenciador_trilha.model.Trail;
@@ -33,26 +31,20 @@ public class TrailListActivity extends AppCompatActivity implements TrailAdapter
 
     private TrailDao trailDao;
     private TrailAdapter adapter;
-    private TextView textTrailCount;
-    private TextView textTotalDistance;
-    private View layoutList;
-    private View layoutEmpty;
+    private ActivityTrailListBinding binding;
     private List<Trail> trails = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trail_list);
+        binding = ActivityTrailListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         trailDao = new TrailDao(this);
-        textTrailCount = findViewById(R.id.text_trail_count);
-        textTotalDistance = findViewById(R.id.text_total_distance);
-        layoutList = findViewById(R.id.layout_list);
-        layoutEmpty = findViewById(R.id.layout_empty);
 
         setupToolbar();
         setupList();
-        findViewById(R.id.fab_new_trail).setOnClickListener(v ->
+        binding.fabNewTrail.setOnClickListener(v ->
                 startActivity(new Intent(this, RecordTrailActivity.class)));
     }
 
@@ -64,9 +56,8 @@ public class TrailListActivity extends AppCompatActivity implements TrailAdapter
     }
 
     private void setupToolbar() {
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(v -> finish());
-        toolbar.setOnMenuItemClickListener(item -> {
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
+        binding.toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_delete_trails) {
                 onDeleteMany();
                 return true;
@@ -77,9 +68,8 @@ public class TrailListActivity extends AppCompatActivity implements TrailAdapter
 
     private void setupList() {
         adapter = new TrailAdapter(this);
-        RecyclerView recycler = findViewById(R.id.recycler_trails);
-        recycler.setLayoutManager(new LinearLayoutManager(this));
-        recycler.setAdapter(adapter);
+        binding.recyclerTrails.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerTrails.setAdapter(adapter);
     }
 
     private void loadTrails() {
@@ -92,16 +82,16 @@ public class TrailListActivity extends AppCompatActivity implements TrailAdapter
         adapter.submit(loaded);
 
         boolean empty = loaded.isEmpty();
-        layoutEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
-        layoutList.setVisibility(empty ? View.GONE : View.VISIBLE);
+        binding.layoutEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
+        binding.layoutList.setVisibility(empty ? View.GONE : View.VISIBLE);
 
         double totalMeters = 0;
         for (Trail trail : loaded) {
             totalMeters += trail.getDistance();
         }
-        textTrailCount.setText(getResources().getQuantityString(
+        binding.textTrailCount.setText(getResources().getQuantityString(
                 R.plurals.list_trail_count, loaded.size(), loaded.size()));
-        textTotalDistance.setText(getString(R.string.list_total_distance, Formatters.distanceKm(totalMeters)));
+        binding.textTotalDistance.setText(getString(R.string.list_total_distance, Formatters.distanceKm(totalMeters)));
     }
 
     @Override

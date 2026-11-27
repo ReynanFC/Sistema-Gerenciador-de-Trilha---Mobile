@@ -1,14 +1,13 @@
 package com.reynanfc.sistema_gerenciador_trilha.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.reynanfc.sistema_gerenciador_trilha.R;
+import com.reynanfc.sistema_gerenciador_trilha.databinding.ItemTrailBinding;
 import com.reynanfc.sistema_gerenciador_trilha.model.Trail;
 import com.reynanfc.sistema_gerenciador_trilha.util.Formatters;
 
@@ -46,8 +45,9 @@ public class TrailAdapter extends RecyclerView.Adapter<TrailAdapter.TrailViewHol
     @NonNull
     @Override
     public TrailViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_trail, parent, false);
-        return new TrailViewHolder(view);
+        ItemTrailBinding itemBinding = ItemTrailBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false);
+        return new TrailViewHolder(itemBinding);
     }
 
     @Override
@@ -60,32 +60,26 @@ public class TrailAdapter extends RecyclerView.Adapter<TrailAdapter.TrailViewHol
         return trails.size();
     }
 
-    // Guarda as views do item para o findViewById rodar uma vez por cartão, e não a cada rolagem
+    // O binding do item é criado uma vez por cartão e reaproveitado na rolagem
     class TrailViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView textName;
-        private final TextView textDate;
-        private final TextView textDistance;
-        private final TextView textDuration;
+        private final ItemTrailBinding itemBinding;
 
-        TrailViewHolder(@NonNull View itemView) {
-            super(itemView);
-            textName = itemView.findViewById(R.id.text_trail_name);
-            textDate = itemView.findViewById(R.id.text_trail_date);
-            textDistance = itemView.findViewById(R.id.text_trail_distance);
-            textDuration = itemView.findViewById(R.id.text_trail_duration);
+        TrailViewHolder(ItemTrailBinding itemBinding) {
+            super(itemBinding.getRoot());
+            this.itemBinding = itemBinding;
         }
 
         void bind(Trail trail) {
-            textName.setText(trail.getName());
-            textDate.setText(Formatters.dateTime(trail.getStartTime()));
-            textDistance.setText(itemView.getContext().getString(
+            itemBinding.textTrailName.setText(trail.getName());
+            itemBinding.textTrailDate.setText(Formatters.dateTime(trail.getStartTime()));
+            itemBinding.textTrailDistance.setText(itemView.getContext().getString(
                     R.string.value_km, Formatters.distanceKm(trail.getDistance())));
-            textDuration.setText(Formatters.shortDuration(trail.getDurationMillis()));
+            itemBinding.textTrailDuration.setText(Formatters.shortDuration(trail.getDurationMillis()));
 
             itemView.setOnClickListener(v -> listener.onOpen(trail));
-            itemView.findViewById(R.id.button_rename).setOnClickListener(v -> listener.onRename(trail));
-            itemView.findViewById(R.id.button_delete).setOnClickListener(v -> listener.onDelete(trail));
+            itemBinding.buttonRename.setOnClickListener(v -> listener.onRename(trail));
+            itemBinding.buttonDelete.setOnClickListener(v -> listener.onDelete(trail));
         }
     }
 }

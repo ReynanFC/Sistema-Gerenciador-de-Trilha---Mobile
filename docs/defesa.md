@@ -130,6 +130,13 @@ renomeada → mutável.
 
 ## Organização
 
+**Por que View Binding e não `findViewById`?**
+Com `viewBinding = true` no Gradle, cada layout gera uma classe (`activity_main.xml` → `ActivityMainBinding`) com um
+campo tipado para cada view com id. Um id que não existe naquele layout nem compila, não precisa de cast e não há
+`NullPointerException` por id de outro layout. Funciona também no ViewHolder (`ItemTrailBinding`), nos diálogos e nos
+`<include>` com id (viram um binding aninhado, ex.: `binding.optionMapVector.optionTitle`). Não é o Data Binding:
+não há expressões no XML, só as referências.
+
 **Por que separar `LocationTracker` e `TrailRecorder` da Activity?**
 A Activity cuida da interface; o tracker cuida do GPS; o recorder faz os cálculos sem conhecer View (dá para testar
 isolado). Se a gravação fosse para um *Service*, bastaria trocar quem usa essas classes.

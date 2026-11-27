@@ -50,6 +50,7 @@ com.reynanfc.sistema_gerenciador_trilha
 ```
 
 Regra principal: **Activity não tem SQL e o DAO não mexe em View**.
+As views são acessadas com **View Binding** (`buildFeatures.viewBinding = true`), sem `findViewById`.
 
 ## Documentação
 
