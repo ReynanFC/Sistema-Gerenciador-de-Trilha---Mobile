@@ -1,6 +1,8 @@
 package com.reynanfc.sistema_gerenciador_trilha.database;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -70,6 +72,45 @@ public class TrailDaoTest {
 
         assertEquals(0, countRows(DbHelper.TABLE_TRAIL));
         assertEquals(0, countRows(DbHelper.TABLE_TRACK_POINT));
+    }
+
+    @Test
+    public void findAllReturnsNewestFirstWithoutPoints() {
+        Trail older = newTrail(3);
+        older.setStartTime(1000);
+        Trail newer = newTrail(3);
+        newer.setStartTime(5000);
+        trailDao.insert(older);
+        trailDao.insert(newer);
+
+        List<Trail> trails = trailDao.findAll();
+
+        assertEquals(2, trails.size());
+        assertEquals(newer.getId(), trails.get(0).getId());
+        assertEquals(older.getId(), trails.get(1).getId());
+        assertTrue(trails.get(0).getPoints().isEmpty());
+    }
+
+    @Test
+    public void findByIdReturnsTrailWithPointsSortedByTimestamp() {
+        Trail trail = newTrail(0);
+        trail.getPoints().add(new TrackPoint(2, 2, 0, 0, 2000));
+        trail.getPoints().add(new TrackPoint(1, 1, 0, 0, 1000));
+        long trailId = trailDao.insert(trail);
+
+        Trail found = trailDao.findById(trailId);
+
+        assertNotNull(found);
+        assertEquals("Test trail", found.getName());
+        assertEquals(trail.getDistance(), found.getDistance(), 0.0);
+        assertEquals(2, found.getPoints().size());
+        assertEquals(1000, found.getPoints().get(0).timestamp());
+        assertEquals(2000, found.getPoints().get(1).timestamp());
+    }
+
+    @Test
+    public void findByIdReturnsNullForUnknownId() {
+        assertNull(trailDao.findById(42));
     }
 
     private Trail newTrail(int pointCount) {
