@@ -140,6 +140,7 @@ sequenceDiagram
 | Decisão | Por quê |
 |---|---|
 | Java + SQLite puro (`SQLiteOpenHelper`), sem Room | O enunciado pede Java e SQLite; o SQL fica visível e explicável |
+| View Binding em vez de `findViewById` | Classe gerada por layout com cada view já tipada: id errado não compila, sem cast e sem `null` escondido |
 | minSdk 28 | As bibliotecas atuais do Google Play Services não suportam o 17 do enunciado |
 | `TrailRecorder` dentro de um `ViewModel` | Sobrevive à rotação de tela sem salvar centenas de pontos no `Bundle` |
 | GPS liga no `onResume` e desliga no `onPause` | Bateria e privacidade; consequência: gravação não continua em segundo plano (exigiria Foreground Service) |

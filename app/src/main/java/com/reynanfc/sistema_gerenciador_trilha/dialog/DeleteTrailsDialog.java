@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -12,9 +11,9 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.radiobutton.MaterialRadioButton;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.reynanfc.sistema_gerenciador_trilha.R;
+import com.reynanfc.sistema_gerenciador_trilha.databinding.DialogDeleteTrailsBinding;
 import com.reynanfc.sistema_gerenciador_trilha.model.Trail;
 import com.reynanfc.sistema_gerenciador_trilha.util.Formatters;
 
@@ -45,7 +44,7 @@ public final class DeleteTrailsDialog {
     @Nullable
     private final Trail selected;
     private final Callbacks callbacks;
-    private final View content;
+    private final DialogDeleteTrailsBinding binding;
 
     private Mode mode;
     @Nullable
@@ -64,32 +63,30 @@ public final class DeleteTrailsDialog {
         this.context = context;
         this.selected = selected;
         this.callbacks = callbacks;
-        // Pai null: o diálogo vira o pai quando a view é colocada nele
-        this.content = LayoutInflater.from(context).inflate(R.layout.dialog_delete_trails, null);
+        this.binding = DialogDeleteTrailsBinding.inflate(LayoutInflater.from(context));
         this.mode = selected != null ? Mode.SELECTED : Mode.RANGE;
     }
 
     private void show(int totalCount) {
-        View optionSelected = content.findViewById(R.id.option_delete_selected);
         if (selected != null) {
-            ((TextView) content.findViewById(R.id.text_delete_selected)).setText(context.getString(
+            binding.textDeleteSelected.setText(context.getString(
                     R.string.delete_selected_description, selected.getName(), Formatters.date(selected.getStartTime())));
         } else {
-            optionSelected.setVisibility(View.GONE);
+            binding.optionDeleteSelected.setVisibility(View.GONE);
         }
-        ((TextView) content.findViewById(R.id.text_delete_all)).setText(context.getResources()
+        binding.textDeleteAll.setText(context.getResources()
                 .getQuantityString(R.plurals.delete_all_description, totalCount, totalCount));
 
-        optionSelected.setOnClickListener(v -> select(Mode.SELECTED));
-        content.findViewById(R.id.option_delete_range).setOnClickListener(v -> select(Mode.RANGE));
-        content.findViewById(R.id.option_delete_all).setOnClickListener(v -> select(Mode.ALL));
-        content.findViewById(R.id.edit_range_from).setOnClickListener(v -> pickDate(true));
-        content.findViewById(R.id.edit_range_to).setOnClickListener(v -> pickDate(false));
+        binding.optionDeleteSelected.setOnClickListener(v -> select(Mode.SELECTED));
+        binding.optionDeleteRange.setOnClickListener(v -> select(Mode.RANGE));
+        binding.optionDeleteAll.setOnClickListener(v -> select(Mode.ALL));
+        binding.editRangeFrom.setOnClickListener(v -> pickDate(true));
+        binding.editRangeTo.setOnClickListener(v -> pickDate(false));
         select(mode);
 
-        AlertDialog dialog = new MaterialAlertDialogBuilder(context).setView(content).show();
-        content.findViewById(R.id.button_delete_cancel).setOnClickListener(v -> dialog.dismiss());
-        content.findViewById(R.id.button_delete_confirm).setOnClickListener(v -> {
+        AlertDialog dialog = new MaterialAlertDialogBuilder(context).setView(binding.getRoot()).show();
+        binding.buttonDeleteCancel.setOnClickListener(v -> dialog.dismiss());
+        binding.buttonDeleteConfirm.setOnClickListener(v -> {
             if (confirm()) {
                 dialog.dismiss();
             }
@@ -98,15 +95,15 @@ public final class DeleteTrailsDialog {
 
     private void select(Mode newMode) {
         mode = newMode;
-        setChecked(R.id.option_delete_selected, R.id.radio_delete_selected, mode == Mode.SELECTED);
-        setChecked(R.id.option_delete_range, R.id.radio_delete_range, mode == Mode.RANGE);
-        setChecked(R.id.option_delete_all, R.id.radio_delete_all, mode == Mode.ALL);
-        content.findViewById(R.id.layout_range_fields).setVisibility(mode == Mode.RANGE ? View.VISIBLE : View.GONE);
+        setChecked(binding.optionDeleteSelected, binding.radioDeleteSelected, mode == Mode.SELECTED);
+        setChecked(binding.optionDeleteRange, binding.radioDeleteRange, mode == Mode.RANGE);
+        setChecked(binding.optionDeleteAll, binding.radioDeleteAll, mode == Mode.ALL);
+        binding.layoutRangeFields.setVisibility(mode == Mode.RANGE ? View.VISIBLE : View.GONE);
     }
 
-    private void setChecked(int cardId, int radioId, boolean checked) {
-        ((MaterialCardView) content.findViewById(cardId)).setChecked(checked);
-        ((MaterialRadioButton) content.findViewById(radioId)).setChecked(checked);
+    private void setChecked(MaterialCardView card, MaterialRadioButton radio, boolean checked) {
+        card.setChecked(checked);
+        radio.setChecked(checked);
     }
 
     private void pickDate(boolean isFrom) {
@@ -117,13 +114,13 @@ public final class DeleteTrailsDialog {
         // No DatePickerDialog os meses começam em 0; no LocalDate, em 1
         new DatePickerDialog(context, (picker, year, month, day) -> {
             LocalDate picked = LocalDate.of(year, month + 1, day);
-            int fieldId = isFrom ? R.id.edit_range_from : R.id.edit_range_to;
             if (isFrom) {
                 fromDate = picked;
+                binding.editRangeFrom.setText(picked.format(DATE_FORMAT));
             } else {
                 toDate = picked;
+                binding.editRangeTo.setText(picked.format(DATE_FORMAT));
             }
-            ((TextInputEditText) content.findViewById(fieldId)).setText(picked.format(DATE_FORMAT));
             clearRangeErrors();
         }, initial.getYear(), initial.getMonthValue() - 1, initial.getDayOfMonth()).show();
     }
@@ -144,8 +141,8 @@ public final class DeleteTrailsDialog {
     }
 
     private boolean confirmRange() {
-        TextInputLayout layoutFrom = content.findViewById(R.id.layout_range_from);
-        TextInputLayout layoutTo = content.findViewById(R.id.layout_range_to);
+        TextInputLayout layoutFrom = binding.layoutRangeFrom;
+        TextInputLayout layoutTo = binding.layoutRangeTo;
         if (fromDate == null || toDate == null) {
             (fromDate == null ? layoutFrom : layoutTo).setError(context.getString(R.string.delete_pick_dates));
             return false;
@@ -164,7 +161,7 @@ public final class DeleteTrailsDialog {
     }
 
     private void clearRangeErrors() {
-        ((TextInputLayout) content.findViewById(R.id.layout_range_from)).setError(null);
-        ((TextInputLayout) content.findViewById(R.id.layout_range_to)).setError(null);
+        binding.layoutRangeFrom.setError(null);
+        binding.layoutRangeTo.setError(null);
     }
 }

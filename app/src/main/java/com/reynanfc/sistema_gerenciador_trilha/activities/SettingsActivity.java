@@ -2,19 +2,15 @@ package com.reynanfc.sistema_gerenciador_trilha.activities;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.reynanfc.sistema_gerenciador_trilha.R;
+import com.reynanfc.sistema_gerenciador_trilha.databinding.ActivitySettingsBinding;
+import com.reynanfc.sistema_gerenciador_trilha.databinding.ComponentOptionCardBinding;
 import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs;
 import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs.MapType;
 import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs.NavigationMode;
@@ -29,15 +25,13 @@ public class SettingsActivity extends AppCompatActivity {
     private MapType selectedMapType;
     private NavigationMode selectedNavigationMode;
 
-    private MaterialCardView cardMapVector;
-    private MaterialCardView cardMapSatellite;
-    private MaterialCardView cardNorthUp;
-    private MaterialCardView cardCourseUp;
+    private ActivitySettingsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         settingsPrefs = new SettingsPrefs(this);
         selectedMapType = settingsPrefs.getMapType();
@@ -64,64 +58,54 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setupToolbar() {
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(v -> finish());
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     private void setupOptionCards() {
-        cardMapVector = bindOption(
-                R.id.option_map_vector,
+        bindOption(
+                binding.optionMapVector,
                 R.drawable.thumb_map_vector,
                 R.string.settings_map_vector_title,
                 R.string.settings_map_vector_description,
                 true
         );
-        cardMapSatellite = bindOption(
-                R.id.option_map_satellite,
+        bindOption(
+                binding.optionMapSatellite,
                 R.drawable.thumb_map_satellite,
                 R.string.settings_map_satellite_title,
                 R.string.settings_map_satellite_description,
                 false
         );
-        cardNorthUp = bindOption(
-                R.id.option_north_up,
+        bindOption(
+                binding.optionNorthUp,
                 R.drawable.thumb_north_up,
                 R.string.settings_north_up,
                 R.string.settings_north_up_description,
                 true
         );
-        cardCourseUp = bindOption(
-                R.id.option_course_up,
+        bindOption(
+                binding.optionCourseUp,
                 R.drawable.thumb_course_up,
                 R.string.settings_course_up,
                 R.string.settings_course_up_description,
                 false
         );
 
-        cardMapVector.setOnClickListener(v -> selectMapType(MapType.VECTOR));
-        cardMapSatellite.setOnClickListener(v -> selectMapType(MapType.SATELLITE));
-        cardNorthUp.setOnClickListener(v -> selectNavigationMode(NavigationMode.NORTH_UP));
-        cardCourseUp.setOnClickListener(v -> selectNavigationMode(NavigationMode.COURSE_UP));
+        binding.optionMapVector.getRoot().setOnClickListener(v -> selectMapType(MapType.VECTOR));
+        binding.optionMapSatellite.getRoot().setOnClickListener(v -> selectMapType(MapType.SATELLITE));
+        binding.optionNorthUp.getRoot().setOnClickListener(v -> selectNavigationMode(NavigationMode.NORTH_UP));
+        binding.optionCourseUp.getRoot().setOnClickListener(v -> selectNavigationMode(NavigationMode.COURSE_UP));
     }
 
-    private MaterialCardView bindOption(@IdRes int cardId,
-                                        @DrawableRes int thumbnailResId,
-                                        @StringRes int titleResId,
-                                        @StringRes int descriptionResId,
-                                        boolean isDefault) {
-        MaterialCardView card = findViewById(cardId);
-
-        ImageView ivThumbnail = card.findViewById(R.id.option_thumbnail);
-        TextView tvTitle = card.findViewById(R.id.option_title);
-        TextView tvDescription = card.findViewById(R.id.option_description);
-        TextView tvBadge = card.findViewById(R.id.option_badge);
-
-        ivThumbnail.setImageResource(thumbnailResId);
-        tvTitle.setText(titleResId);
-        tvDescription.setText(descriptionResId);
-        tvBadge.setVisibility(isDefault ? View.VISIBLE : View.GONE);
-
-        return card;
+    private void bindOption(ComponentOptionCardBinding option,
+                            @DrawableRes int thumbnailResId,
+                            @StringRes int titleResId,
+                            @StringRes int descriptionResId,
+                            boolean isDefault) {
+        option.optionThumbnail.setImageResource(thumbnailResId);
+        option.optionTitle.setText(titleResId);
+        option.optionDescription.setText(descriptionResId);
+        option.optionBadge.setVisibility(isDefault ? View.VISIBLE : View.GONE);
     }
 
     private void selectMapType(MapType mapType) {
@@ -135,20 +119,19 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void renderSelection() {
-        setOptionChecked(cardMapVector, selectedMapType == MapType.VECTOR);
-        setOptionChecked(cardMapSatellite, selectedMapType == MapType.SATELLITE);
-        setOptionChecked(cardNorthUp, selectedNavigationMode == NavigationMode.NORTH_UP);
-        setOptionChecked(cardCourseUp, selectedNavigationMode == NavigationMode.COURSE_UP);
+        setOptionChecked(binding.optionMapVector, selectedMapType == MapType.VECTOR);
+        setOptionChecked(binding.optionMapSatellite, selectedMapType == MapType.SATELLITE);
+        setOptionChecked(binding.optionNorthUp, selectedNavigationMode == NavigationMode.NORTH_UP);
+        setOptionChecked(binding.optionCourseUp, selectedNavigationMode == NavigationMode.COURSE_UP);
     }
 
-    private void setOptionChecked(MaterialCardView card, boolean checked) {
-        card.setChecked(checked);
-        MaterialRadioButton radio = card.findViewById(R.id.option_radio);
-        radio.setChecked(checked);
+    private void setOptionChecked(ComponentOptionCardBinding option, boolean checked) {
+        option.getRoot().setChecked(checked);
+        option.optionRadio.setChecked(checked);
     }
 
     private void setupSaveButton() {
-        findViewById(R.id.button_save).setOnClickListener(v -> {
+        binding.buttonSave.setOnClickListener(v -> {
             settingsPrefs.setMapType(selectedMapType);
             settingsPrefs.setNavigationMode(selectedNavigationMode);
             Toast.makeText(this, R.string.settings_saved, Toast.LENGTH_SHORT).show();
