@@ -1,7 +1,6 @@
 package com.reynanfc.sistema_gerenciador_trilha.activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,10 +28,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.reynanfc.sistema_gerenciador_trilha.R;
 import com.reynanfc.sistema_gerenciador_trilha.location.LocationTracker;
+import com.reynanfc.sistema_gerenciador_trilha.util.MapIcons;
 import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs;
 
 public class RecordTrailActivity extends AppCompatActivity {
@@ -51,6 +53,8 @@ public class RecordTrailActivity extends AppCompatActivity {
     private LocationTracker locationTracker;
     private boolean hasLocationPermission;
     private boolean cameraCentered;
+    @Nullable
+    private Marker positionMarker;
 
     // Must be registered before the Activity is started, so it is a field and not created on demand
     private final ActivityResultLauncher<String[]> locationPermissionLauncher =
@@ -125,7 +129,6 @@ public class RecordTrailActivity extends AppCompatActivity {
     private void onLocationPermissionGranted() {
         hasLocationPermission = true;
         chipAccuracy.setText(R.string.record_accuracy_waiting);
-        enableMyLocationLayer();
         checkDeviceLocation();
     }
 
@@ -153,6 +156,8 @@ public class RecordTrailActivity extends AppCompatActivity {
             return;
         }
         LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+        updatePositionMarker(position, location);
+
         if (cameraCentered) {
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(position));
         } else {
@@ -161,14 +166,23 @@ public class RecordTrailActivity extends AppCompatActivity {
         }
     }
 
-    // Temporary blue dot until the custom marker (#21); needs both the map and the permission
-    @SuppressLint("MissingPermission")
-    private void enableMyLocationLayer() {
-        if (googleMap == null || !hasLocationPermission) {
-            return;
+    // One marker for the whole screen: created on the first fix and only moved afterwards
+    private void updatePositionMarker(LatLng position, Location location) {
+        if (positionMarker == null) {
+            positionMarker = googleMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .icon(MapIcons.fromVector(this, R.drawable.ic_position_marker))
+                    .anchor(0.5f, 0.5f)
+                    .flat(true));
+        } else {
+            positionMarker.setPosition(position);
         }
-        googleMap.setMyLocationEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+        // Flat marker: rotation is relative to north, so the arrow keeps pointing the right way
+        // even when the map rotates (Course Up). Standing still has no bearing, so keep the last one
+        if (positionMarker != null && location.hasBearing()) {
+            positionMarker.setRotation(location.getBearing());
+        }
     }
 
     private void onLocationPermissionDenied() {
@@ -225,8 +239,6 @@ public class RecordTrailActivity extends AppCompatActivity {
         UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setCompassEnabled(false);
         uiSettings.setMapToolbarEnabled(false);
-
-        enableMyLocationLayer();
     }
 
     private int toGoogleMapType(SettingsPrefs.MapType mapType) {

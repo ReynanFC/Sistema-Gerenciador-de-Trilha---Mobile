@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Current position marker: green disc with white border and a white arrow pointing to the bearing.
+     Drawn into a bitmap for the map Marker (the map cannot use vector drawables directly). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="44dp"
+    android:height="44dp"
+    android:viewportWidth="44"
+    android:viewportHeight="44">
+    <path
+        android:fillColor="#33000000"
+        android:pathData="M22,23m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0" />
+    <path
+        android:fillColor="@color/surface"
+        android:pathData="M22,22m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0" />
+    <path
+        android:fillColor="@color/green_primary"
+        android:pathData="M22,22m-16.5,0a16.5,16.5 0,1 1,33 0a16.5,16.5 0,1 1,-33 0" />
+    <path
+        android:fillColor="@color/surface"
+        android:pathData="M22,11L29.5,31L22,27.2L14.5,31Z" />
+</vector>
