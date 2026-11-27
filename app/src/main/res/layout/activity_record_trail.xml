@@ -153,6 +153,7 @@
                             <TextView
                                 android:id="@+id/text_distance"
                                 style="@style/TrilhaApp.Stat.Value"
+                                android:text="@string/record_distance_zero"
                                 tools:text="3,48" />
 
                             <TextView
