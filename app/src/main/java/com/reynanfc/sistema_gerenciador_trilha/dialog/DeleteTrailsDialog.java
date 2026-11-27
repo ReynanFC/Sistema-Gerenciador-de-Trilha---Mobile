@@ -64,6 +64,7 @@ public final class DeleteTrailsDialog {
         this.context = context;
         this.selected = selected;
         this.callbacks = callbacks;
+        // null parent: the dialog becomes the parent when the view is set on it
         this.content = LayoutInflater.from(context).inflate(R.layout.dialog_delete_trails, null);
         this.mode = selected != null ? Mode.SELECTED : Mode.RANGE;
     }

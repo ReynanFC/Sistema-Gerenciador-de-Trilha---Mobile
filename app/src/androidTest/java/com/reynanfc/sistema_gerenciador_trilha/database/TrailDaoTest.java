@@ -27,24 +27,20 @@ import java.util.List;
 @RunWith(AndroidJUnit4.class)
 public class TrailDaoTest {
 
-    private static final String DATABASE_NAME = "trilha.db";
-
-    private Context context;
     private DbHelper dbHelper;
     private TrailDao trailDao;
 
+    // In-memory database: the tests never touch the trails saved in the real app database
     @Before
     public void setUp() {
-        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        context.deleteDatabase(DATABASE_NAME);
-        dbHelper = new DbHelper(context);
-        trailDao = new TrailDao(context);
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        dbHelper = new DbHelper(context, null);
+        trailDao = new TrailDao(dbHelper);
     }
 
     @After
     public void tearDown() {
         dbHelper.close();
-        context.deleteDatabase(DATABASE_NAME);
     }
 
     @Test

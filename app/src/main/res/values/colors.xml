@@ -27,8 +27,6 @@
     <color name="compass_north">#C62828</color>
     <color name="compass_south">#9E9E9E</color>
 
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
 
     <!-- Record trail screen -->
     <color name="recording_dot">#E57373</color>

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import androidx.annotation.Nullable;
+
 /**
  * Creates and upgrades the SQLite schema: one trail has many track points (1:N).
  * Android calls onCreate only the first time the database file is opened, and onUpgrade
@@ -59,7 +61,12 @@ public class DbHelper extends SQLiteOpenHelper {
             "CREATE INDEX idx_point_trail ON " + TABLE_TRACK_POINT + "(" + COLUMN_POINT_TRAIL_ID + ")";
 
     public DbHelper(Context context) {
-        super(context.getApplicationContext(), DATABASE_NAME, null, DATABASE_VERSION);
+        this(context, DATABASE_NAME);
+    }
+
+    /** @param databaseName file name, or null for an in-memory database (used by the tests) */
+    public DbHelper(Context context, @Nullable String databaseName) {
+        super(context.getApplicationContext(), databaseName, null, DATABASE_VERSION);
     }
 
     @Override

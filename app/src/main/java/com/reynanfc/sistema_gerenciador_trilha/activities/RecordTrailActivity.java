@@ -194,6 +194,7 @@ public class RecordTrailActivity extends AppCompatActivity {
 
     private void showFinishSheet(boolean wasRunning, long endTime) {
         BottomSheetDialog sheet = new BottomSheetDialog(this);
+        // null parent: the dialog becomes the parent when the view is set on it
         View content = getLayoutInflater().inflate(R.layout.bottom_sheet_finish_trail, null);
         sheet.setContentView(content);
         sheet.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);

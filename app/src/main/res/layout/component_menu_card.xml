@@ -12,6 +12,7 @@
         <ImageView
             android:id="@+id/menu_card_icon"
             style="@style/TrilhaApp.Menu.Icon"
+            android:importantForAccessibility="no"
             tools:src="@drawable/ic_record" />
 
         <LinearLayout style="@style/TrilhaApp.Menu.Texts">
@@ -27,6 +28,8 @@
                 tools:text="@string/menu_record_subtitle" />
         </LinearLayout>
 
-        <ImageView style="@style/TrilhaApp.Menu.Chevron" />
+        <ImageView
+            style="@style/TrilhaApp.Menu.Chevron"
+            android:importantForAccessibility="no" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

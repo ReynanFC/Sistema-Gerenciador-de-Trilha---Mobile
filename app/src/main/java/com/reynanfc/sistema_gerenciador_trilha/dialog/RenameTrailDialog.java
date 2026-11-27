@@ -26,6 +26,7 @@ public final class RenameTrailDialog {
     }
 
     public static void show(Context context, Trail trail, Consumer<String> onRenamed) {
+        // null parent: the dialog becomes the parent when the view is set on it
         View content = LayoutInflater.from(context).inflate(R.layout.dialog_rename_trail, null);
         TextView textDate = content.findViewById(R.id.text_rename_date);
         TextInputLayout layoutName = content.findViewById(R.id.layout_rename);
