@@ -7,20 +7,26 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,10 +38,13 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.reynanfc.sistema_gerenciador_trilha.R;
 import com.reynanfc.sistema_gerenciador_trilha.location.LocationTracker;
+import com.reynanfc.sistema_gerenciador_trilha.location.TrailRecorder;
+import com.reynanfc.sistema_gerenciador_trilha.util.Formatters;
 import com.reynanfc.sistema_gerenciador_trilha.util.MapIcons;
 import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs;
 
@@ -47,6 +56,7 @@ public class RecordTrailActivity extends AppCompatActivity {
     };
 
     private static final float INITIAL_ZOOM = 17f;
+    private static final long TIMER_TICK_MILLIS = 500;
 
     private SettingsPrefs settingsPrefs;
     @Nullable
@@ -59,6 +69,20 @@ public class RecordTrailActivity extends AppCompatActivity {
     private Marker positionMarker;
     @Nullable
     private Circle accuracyCircle;
+    private TrailRecorder recorder;
+    private TextView textTimer;
+    private TextView textRecordingStatus;
+    private MaterialButton buttonPause;
+
+    // Refreshes the timer text while the screen is visible (started in onResume, removed in onPause)
+    private final Handler timerHandler = new Handler(Looper.getMainLooper());
+    private final Runnable timerTick = new Runnable() {
+        @Override
+        public void run() {
+            textTimer.setText(Formatters.duration(recorder.getElapsedMillis()));
+            timerHandler.postDelayed(this, TIMER_TICK_MILLIS);
+        }
+    };
 
     // Must be registered before the Activity is started, so it is a field and not created on demand
     private final ActivityResultLauncher<String[]> locationPermissionLauncher =
@@ -80,11 +104,17 @@ public class RecordTrailActivity extends AppCompatActivity {
 
         settingsPrefs = new SettingsPrefs(this);
         chipAccuracy = findViewById(R.id.chip_accuracy);
+        textTimer = findViewById(R.id.text_timer);
+        textRecordingStatus = findViewById(R.id.text_recording_status);
+        buttonPause = findViewById(R.id.button_pause);
+        recorder = new ViewModelProvider(this).get(RecordTrailViewModel.class).recorder;
         locationTracker = new LocationTracker(this, this::onLocation);
 
         setupWindowInsets();
         findViewById(R.id.button_back).setOnClickListener(v -> finish());
         showCurrentSettings();
+        buttonPause.setOnClickListener(v -> togglePause());
+        renderRecordingState();
         setupMap();
         checkLocationPermission();
     }
@@ -96,12 +126,44 @@ public class RecordTrailActivity extends AppCompatActivity {
         if (hasLocationPermission) {
             locationTracker.start();
         }
+        timerHandler.post(timerTick);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         locationTracker.stop();
+        timerHandler.removeCallbacks(timerTick);
+    }
+
+    private void togglePause() {
+        if (recorder.isRunning()) {
+            recorder.pause();
+        } else {
+            recorder.resume();
+        }
+        renderRecordingState();
+    }
+
+    // Status pill and Pause/Resume button; before the first GPS fix there is nothing to pause
+    private void renderRecordingState() {
+        if (!recorder.isStarted()) {
+            setRecordingStatus(R.string.record_waiting_gps, R.drawable.dot_waiting);
+        } else if (recorder.isRunning()) {
+            setRecordingStatus(R.string.record_recording, R.drawable.dot_recording);
+        } else {
+            setRecordingStatus(R.string.record_paused, R.drawable.dot_waiting);
+        }
+
+        buttonPause.setEnabled(recorder.isStarted());
+        boolean paused = recorder.isStarted() && !recorder.isRunning();
+        buttonPause.setText(paused ? R.string.record_resume : R.string.record_pause);
+        buttonPause.setIconResource(paused ? R.drawable.ic_play : R.drawable.ic_pause);
+    }
+
+    private void setRecordingStatus(@StringRes int textResId, @DrawableRes int dotResId) {
+        textRecordingStatus.setText(textResId);
+        textRecordingStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(dotResId, 0, 0, 0);
     }
 
     private boolean hasPermission(String permission) {
@@ -154,6 +216,12 @@ public class RecordTrailActivity extends AppCompatActivity {
     }
 
     private void onLocation(Location location) {
+        // Recording starts with the first fix, so the start time and the first point match
+        if (!recorder.isStarted()) {
+            recorder.start();
+            renderRecordingState();
+        }
+
         chipAccuracy.setText(getString(R.string.record_accuracy, Math.round(location.getAccuracy())));
 
         if (googleMap == null) {
