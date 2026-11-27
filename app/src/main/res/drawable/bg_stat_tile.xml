@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Light rounded tile for a label + value pair (finish sheet summary, trail detail) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/background" />
+    <corners android:radius="@dimen/icon_corner_radius" />
+</shape>

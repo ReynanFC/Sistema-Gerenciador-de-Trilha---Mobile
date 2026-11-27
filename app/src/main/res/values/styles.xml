@@ -214,4 +214,53 @@
         <item name="android:textColor">@color/text_on_primary</item>
         <item name="iconTint">@color/text_on_primary</item>
     </style>
+
+    <!-- Label + value tile (finish sheet grid, detail panel) -->
+    <style name="TrilhaApp.Tile" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/bg_stat_tile</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/tile_padding</item>
+    </style>
+
+    <style name="TrilhaApp.Tile.Label" parent="TrilhaApp.SectionLabel">
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="TrilhaApp.Tile.Value" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">@dimen/text_tile_value</item>
+    </style>
+
+    <!-- Outlined text field with the app corner radius and green focus -->
+    <style name="TrilhaApp.TextField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="boxCornerRadiusTopStart">@dimen/icon_corner_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/icon_corner_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/icon_corner_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/icon_corner_radius</item>
+        <item name="boxStrokeColor">@color/green_primary</item>
+        <item name="hintTextColor">@color/green_primary</item>
+    </style>
+
+    <!-- White outlined secondary button (Descartar) -->
+    <style name="TrilhaApp.Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">@dimen/text_button</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="strokeColor">@color/outline</item>
+        <item name="cornerRadius">@dimen/card_corner_radius</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
 </resources>
