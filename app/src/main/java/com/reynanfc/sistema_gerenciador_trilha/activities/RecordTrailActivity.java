@@ -7,12 +7,11 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -44,12 +43,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.reynanfc.sistema_gerenciador_trilha.R;
 import com.reynanfc.sistema_gerenciador_trilha.database.TrailDao;
+import com.reynanfc.sistema_gerenciador_trilha.databinding.ActivityRecordTrailBinding;
+import com.reynanfc.sistema_gerenciador_trilha.databinding.BottomSheetFinishTrailBinding;
 import com.reynanfc.sistema_gerenciador_trilha.location.LocationTracker;
 import com.reynanfc.sistema_gerenciador_trilha.location.TrailRecorder;
 import com.reynanfc.sistema_gerenciador_trilha.model.Trail;
@@ -78,10 +76,10 @@ public class RecordTrailActivity extends AppCompatActivity {
     /** m/s (~1,8 km/h): abaixo disso o rumo do GPS é ruído */
     private static final float MIN_SPEED_FOR_BEARING = 0.5f;
 
+    private ActivityRecordTrailBinding binding;
     private SettingsPrefs settingsPrefs;
     @Nullable
     private GoogleMap googleMap;
-    private Chip chipAccuracy;
     private LocationTracker locationTracker;
     private boolean hasLocationPermission;
     private boolean cameraCentered;
@@ -90,13 +88,6 @@ public class RecordTrailActivity extends AppCompatActivity {
     @Nullable
     private Circle accuracyCircle;
     private TrailRecorder recorder;
-    private TextView textTimer;
-    private TextView textSpeed;
-    private TextView textMaxSpeed;
-    private TextView textDistance;
-    private TextView textRecordingStatus;
-    private MaterialButton buttonPause;
-    private ImageButton buttonCompass;
 
     // Sair depois que a gravação começou perderia a trilha, então pergunta antes
     private final OnBackPressedCallback backCallback = new OnBackPressedCallback(true) {
@@ -115,7 +106,7 @@ public class RecordTrailActivity extends AppCompatActivity {
     private final Runnable timerTick = new Runnable() {
         @Override
         public void run() {
-            textTimer.setText(Formatters.duration(recorder.getElapsedMillis()));
+            binding.textTimer.setText(Formatters.duration(recorder.getElapsedMillis()));
             timerHandler.postDelayed(this, TIMER_TICK_MILLIS);
         }
     };
@@ -136,27 +127,20 @@ public class RecordTrailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_record_trail);
+        binding = ActivityRecordTrailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         settingsPrefs = new SettingsPrefs(this);
-        chipAccuracy = findViewById(R.id.chip_accuracy);
-        textTimer = findViewById(R.id.text_timer);
-        textSpeed = findViewById(R.id.text_speed);
-        textMaxSpeed = findViewById(R.id.text_max_speed);
-        textDistance = findViewById(R.id.text_distance);
-        textRecordingStatus = findViewById(R.id.text_recording_status);
-        buttonPause = findViewById(R.id.button_pause);
-        buttonCompass = findViewById(R.id.button_compass);
         recorder = new ViewModelProvider(this).get(RecordTrailViewModel.class).recorder;
         locationTracker = new LocationTracker(this, this::onLocation);
 
         setupWindowInsets();
-        findViewById(R.id.button_back).setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        binding.buttonBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
         getOnBackPressedDispatcher().addCallback(this, backCallback);
-        findViewById(R.id.button_finish).setOnClickListener(v -> onFinishClicked());
+        binding.buttonFinish.setOnClickListener(v -> onFinishClicked());
         showCurrentSettings();
-        buttonPause.setOnClickListener(v -> togglePause());
-        buttonCompass.setOnClickListener(v -> resetBearing());
+        binding.buttonPause.setOnClickListener(v -> togglePause());
+        binding.buttonCompass.setOnClickListener(v -> resetBearing());
         renderRecordingState();
         renderStats();
         setupMap();
@@ -200,30 +184,24 @@ public class RecordTrailActivity extends AppCompatActivity {
 
     private void showFinishSheet(boolean wasRunning, long endTime) {
         BottomSheetDialog sheet = new BottomSheetDialog(this);
-        // Pai null: o diálogo vira o pai quando a view é colocada nele
-        View content = getLayoutInflater().inflate(R.layout.bottom_sheet_finish_trail, null);
-        sheet.setContentView(content);
+        BottomSheetFinishTrailBinding sheetBinding = BottomSheetFinishTrailBinding.inflate(getLayoutInflater());
+        sheet.setContentView(sheetBinding.getRoot());
         sheet.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
         sheet.getBehavior().setSkipCollapsed(true);
 
         long elapsed = recorder.getElapsedMillis();
         double averageSpeed = averageSpeed(recorder.getDistance(), elapsed);
 
-        ((TextView) content.findViewById(R.id.text_finish_start)).setText(Formatters.dateTime(recorder.getStartTime()));
-        ((TextView) content.findViewById(R.id.text_finish_end)).setText(Formatters.dateTime(endTime));
+        sheetBinding.textFinishStart.setText(Formatters.dateTime(recorder.getStartTime()));
+        sheetBinding.textFinishEnd.setText(Formatters.dateTime(endTime));
         // Duração = fim - início (o que a lista e a visualização mostram); o cronômetro mostra só o tempo em movimento
-        ((TextView) content.findViewById(R.id.text_finish_duration)).setText(
-                Formatters.duration(endTime - recorder.getStartTime()));
-        ((TextView) content.findViewById(R.id.text_finish_distance)).setText(
+        sheetBinding.textFinishDuration.setText(Formatters.duration(endTime - recorder.getStartTime()));
+        sheetBinding.textFinishDistance.setText(
                 getString(R.string.value_km, Formatters.distanceKm(recorder.getDistance())));
-        ((TextView) content.findViewById(R.id.text_finish_average_speed)).setText(
+        sheetBinding.textFinishAverageSpeed.setText(
                 getString(R.string.value_kmh, Formatters.speedKmh(averageSpeed)));
-        ((TextView) content.findViewById(R.id.text_finish_max_speed)).setText(
+        sheetBinding.textFinishMaxSpeed.setText(
                 getString(R.string.value_kmh, Formatters.speedKmh(recorder.getMaxSpeed())));
-
-        TextInputLayout layoutName = content.findViewById(R.id.layout_trail_name);
-        TextInputEditText editName = content.findViewById(R.id.edit_trail_name);
-        MaterialButton buttonSave = content.findViewById(R.id.button_save_trail);
 
         sheet.setOnCancelListener(d -> {
             if (wasRunning) {
@@ -231,16 +209,17 @@ public class RecordTrailActivity extends AppCompatActivity {
                 renderRecordingState();
             }
         });
-        content.findViewById(R.id.button_discard).setOnClickListener(v -> confirmDiscard());
-        buttonSave.setOnClickListener(v -> {
-            String name = editName.getText() == null ? "" : editName.getText().toString().trim();
+        sheetBinding.buttonDiscard.setOnClickListener(v -> confirmDiscard());
+        sheetBinding.buttonSaveTrail.setOnClickListener(v -> {
+            Editable text = sheetBinding.editTrailName.getText();
+            String name = text == null ? "" : text.toString().trim();
             if (name.isEmpty()) {
-                layoutName.setError(getString(R.string.finish_name_required));
+                sheetBinding.layoutTrailName.setError(getString(R.string.finish_name_required));
                 return;
             }
-            layoutName.setError(null);
-            buttonSave.setEnabled(false);
-            saveTrail(buildTrail(name, endTime, averageSpeed), sheet, buttonSave);
+            sheetBinding.layoutTrailName.setError(null);
+            sheetBinding.buttonSaveTrail.setEnabled(false);
+            saveTrail(buildTrail(name, endTime, averageSpeed), sheet, sheetBinding.buttonSaveTrail);
         });
 
         sheet.show();
@@ -301,21 +280,21 @@ public class RecordTrailActivity extends AppCompatActivity {
             setRecordingStatus(R.string.record_paused, R.drawable.dot_waiting);
         }
 
-        buttonPause.setEnabled(recorder.isStarted());
+        binding.buttonPause.setEnabled(recorder.isStarted());
         boolean paused = recorder.isStarted() && !recorder.isRunning();
-        buttonPause.setText(paused ? R.string.record_resume : R.string.record_pause);
-        buttonPause.setIconResource(paused ? R.drawable.ic_play : R.drawable.ic_pause);
+        binding.buttonPause.setText(paused ? R.string.record_resume : R.string.record_pause);
+        binding.buttonPause.setIconResource(paused ? R.drawable.ic_play : R.drawable.ic_pause);
     }
 
     private void renderStats() {
-        textSpeed.setText(Formatters.speedKmh(recorder.getCurrentSpeed()));
-        textMaxSpeed.setText(Formatters.speedKmh(recorder.getMaxSpeed()));
-        textDistance.setText(Formatters.distanceKm(recorder.getDistance()));
+        binding.textSpeed.setText(Formatters.speedKmh(recorder.getCurrentSpeed()));
+        binding.textMaxSpeed.setText(Formatters.speedKmh(recorder.getMaxSpeed()));
+        binding.textDistance.setText(Formatters.distanceKm(recorder.getDistance()));
     }
 
     private void setRecordingStatus(@StringRes int textResId, @DrawableRes int dotResId) {
-        textRecordingStatus.setText(textResId);
-        textRecordingStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(dotResId, 0, 0, 0);
+        binding.textRecordingStatus.setText(textResId);
+        binding.textRecordingStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(dotResId, 0, 0, 0);
     }
 
     private boolean hasPermission(String permission) {
@@ -346,7 +325,7 @@ public class RecordTrailActivity extends AppCompatActivity {
 
     private void onLocationPermissionGranted() {
         hasLocationPermission = true;
-        chipAccuracy.setText(R.string.record_accuracy_waiting);
+        binding.chipAccuracy.setText(R.string.record_accuracy_waiting);
         checkDeviceLocation();
     }
 
@@ -363,7 +342,7 @@ public class RecordTrailActivity extends AppCompatActivity {
     }
 
     private void onDeviceLocationOff() {
-        chipAccuracy.setText(R.string.record_accuracy_gps_off);
+        binding.chipAccuracy.setText(R.string.record_accuracy_gps_off);
         Toast.makeText(this, R.string.location_disabled_message, Toast.LENGTH_LONG).show();
     }
 
@@ -376,7 +355,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         recorder.addLocation(location);
         renderStats();
 
-        chipAccuracy.setText(getString(R.string.record_accuracy, Math.round(location.getAccuracy())));
+        binding.chipAccuracy.setText(getString(R.string.record_accuracy, Math.round(location.getAccuracy())));
 
         if (googleMap == null) {
             return;
@@ -460,7 +439,7 @@ public class RecordTrailActivity extends AppCompatActivity {
     }
 
     private void onLocationPermissionDenied() {
-        chipAccuracy.setText(R.string.record_accuracy_no_permission);
+        binding.chipAccuracy.setText(R.string.record_accuracy_no_permission);
 
         // Depois de duas recusas (ou "não perguntar novamente") o Android para de mostrar o diálogo dele,
         // então o único caminho é a tela de configurações do app
@@ -518,7 +497,7 @@ public class RecordTrailActivity extends AppCompatActivity {
 
         // A agulha da bússola aponta o norte real: gira o ícone no sentido contrário ao rumo do mapa
         googleMap.setOnCameraMoveListener(() ->
-                buttonCompass.setRotation(-googleMap.getCameraPosition().bearing));
+                binding.buttonCompass.setRotation(-googleMap.getCameraPosition().bearing));
     }
 
     private int toGoogleMapType(SettingsPrefs.MapType mapType) {
@@ -532,14 +511,13 @@ public class RecordTrailActivity extends AppCompatActivity {
     }
 
     private void showCurrentSettings() {
-        Chip chipSettings = findViewById(R.id.chip_settings);
-        chipSettings.setText(getString(R.string.record_settings_summary,
+        binding.chipSettings.setText(getString(R.string.record_settings_summary,
                 getString(settingsPrefs.getMapType().labelResId),
                 getString(settingsPrefs.getNavigationMode().labelResId)));
     }
 
     private void setupWindowInsets() {
-        View overlay = findViewById(R.id.record_overlay);
+        View overlay = binding.recordOverlay;
 
         int initialLeft = overlay.getPaddingLeft();
         int initialTop = overlay.getPaddingTop();
