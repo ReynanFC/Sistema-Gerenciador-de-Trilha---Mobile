@@ -42,6 +42,7 @@
     <dimen name="map_control_icon_padding">10dp</dimen>
     <dimen name="map_control_elevation">4dp</dimen>
     <dimen name="recording_dot">8dp</dimen>
+    <dimen name="accuracy_stroke_width">1.5dp</dimen>
     <dimen name="stats_padding">18dp</dimen>
     <dimen name="text_timer">40sp</dimen>
     <dimen name="text_stat_value">20sp</dimen>

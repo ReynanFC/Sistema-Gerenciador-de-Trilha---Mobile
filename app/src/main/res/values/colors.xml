@@ -32,4 +32,7 @@
 
     <!-- Record trail screen -->
     <color name="recording_dot">#E57373</color>
+    <!-- GPS accuracy circle: route blue with alpha so the map stays visible underneath -->
+    <color name="accuracy_fill">#331565C0</color>
+    <color name="accuracy_stroke">#991565C0</color>
 </resources>
