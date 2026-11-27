@@ -4,16 +4,24 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.material.chip.Chip;
 import com.reynanfc.sistema_gerenciador_trilha.R;
 import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs;
 
 public class RecordTrailActivity extends AppCompatActivity {
+
+    private SettingsPrefs settingsPrefs;
+    @Nullable
+    private GoogleMap googleMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,20 +29,50 @@ public class RecordTrailActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_record_trail);
 
+        settingsPrefs = new SettingsPrefs(this);
+
         setupWindowInsets();
         findViewById(R.id.button_back).setOnClickListener(v -> finish());
         showCurrentSettings();
+        setupMap();
+    }
+
+    // The map loads asynchronously: googleMap is only usable after onMapReady
+    private void setupMap() {
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this::onMapReady);
+        }
+    }
+
+    private void onMapReady(GoogleMap map) {
+        googleMap = map;
+        googleMap.setMapType(toGoogleMapType(settingsPrefs.getMapType()));
+
+        // The screen has its own compass button and controls
+        UiSettings uiSettings = googleMap.getUiSettings();
+        uiSettings.setCompassEnabled(false);
+        uiSettings.setMapToolbarEnabled(false);
+    }
+
+    private int toGoogleMapType(SettingsPrefs.MapType mapType) {
+        switch (mapType) {
+            case SATELLITE:
+                return GoogleMap.MAP_TYPE_SATELLITE;
+            case VECTOR:
+            default:
+                return GoogleMap.MAP_TYPE_NORMAL;
+        }
     }
 
     private void showCurrentSettings() {
-        SettingsPrefs prefs = new SettingsPrefs(this);
         Chip chipSettings = findViewById(R.id.chip_settings);
         chipSettings.setText(getString(R.string.record_settings_summary,
-                getString(prefs.getMapType().labelResId),
-                getString(prefs.getNavigationMode().labelResId)));
+                getString(settingsPrefs.getMapType().labelResId),
+                getString(settingsPrefs.getNavigationMode().labelResId)));
     }
 
-    // The map stays behind the system bars; only the floating controls are pushed inside them
     private void setupWindowInsets() {
         View overlay = findViewById(R.id.record_overlay);
 
