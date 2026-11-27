@@ -19,7 +19,11 @@ public class TrailDao {
     private final DbHelper dbHelper;
 
     public TrailDao(Context context) {
-        dbHelper = new DbHelper(context);
+        this(new DbHelper(context));
+    }
+
+    public TrailDao(DbHelper dbHelper) {
+        this.dbHelper = dbHelper;
     }
 
     /**

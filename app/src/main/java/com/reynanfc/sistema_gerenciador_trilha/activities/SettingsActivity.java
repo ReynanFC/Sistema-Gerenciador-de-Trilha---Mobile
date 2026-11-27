@@ -21,6 +21,9 @@ import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs.NavigationMode
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private static final String STATE_MAP_TYPE = "state_map_type";
+    private static final String STATE_NAVIGATION_MODE = "state_navigation_mode";
+
     private SettingsPrefs settingsPrefs;
 
     private MapType selectedMapType;
@@ -39,11 +42,25 @@ public class SettingsActivity extends AppCompatActivity {
         settingsPrefs = new SettingsPrefs(this);
         selectedMapType = settingsPrefs.getMapType();
         selectedNavigationMode = settingsPrefs.getNavigationMode();
+        // After a rotation, keep what was picked but not saved yet
+        if (savedInstanceState != null) {
+            selectedMapType = MapType.valueOf(
+                    savedInstanceState.getString(STATE_MAP_TYPE, selectedMapType.name()));
+            selectedNavigationMode = NavigationMode.valueOf(
+                    savedInstanceState.getString(STATE_NAVIGATION_MODE, selectedNavigationMode.name()));
+        }
 
         setupToolbar();
         setupOptionCards();
         setupSaveButton();
         renderSelection();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(STATE_MAP_TYPE, selectedMapType.name());
+        outState.putString(STATE_NAVIGATION_MODE, selectedNavigationMode.name());
     }
 
     private void setupToolbar() {
