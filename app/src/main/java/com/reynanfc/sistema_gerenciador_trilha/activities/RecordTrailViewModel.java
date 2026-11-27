@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel;
 import com.reynanfc.sistema_gerenciador_trilha.location.TrailRecorder;
 
 /**
- * Keeps the recording alive across configuration changes: on rotation Android destroys and
- * recreates the Activity, but hands the same ViewModel to the new instance.
+ * Mantém a gravação viva nas mudanças de configuração: na rotação o Android destrói e
+ * recria a Activity, mas entrega o mesmo ViewModel para a nova instância.
  */
 public class RecordTrailViewModel extends ViewModel {
 

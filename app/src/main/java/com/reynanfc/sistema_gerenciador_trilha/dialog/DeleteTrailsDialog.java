@@ -23,15 +23,15 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
- * "Apagar trilhas" dialog with three modes: the selected trail, a date range or all trails.
- * Like the rename dialog, it only collects the choice; the caller runs the DAO.
+ * Diálogo "Apagar trilhas" com três modos: a trilha selecionada, um intervalo de datas ou todas.
+ * Como o diálogo de renomear, ele só coleta a escolha; quem chama executa o DAO.
  */
 public final class DeleteTrailsDialog {
 
     public interface Callbacks {
         void deleteOne(Trail trail);
 
-        /** Both limits inclusive, in epoch millis: start of the first day to end of the last day */
+        /** Os dois limites incluídos, em epoch millis: do início do primeiro dia ao fim do último */
         void deleteBetween(long fromMillis, long toMillis);
 
         void deleteAll();
@@ -54,7 +54,7 @@ public final class DeleteTrailsDialog {
     private LocalDate toDate;
 
     /**
-     * @param selected the trail whose delete button was tapped, or null when opened from the app bar
+     * @param selected a trilha cuja lixeira foi tocada, ou null quando aberto pela app bar
      */
     public static void show(Context context, @Nullable Trail selected, int totalCount, Callbacks callbacks) {
         new DeleteTrailsDialog(context, selected, callbacks).show(totalCount);
@@ -64,7 +64,7 @@ public final class DeleteTrailsDialog {
         this.context = context;
         this.selected = selected;
         this.callbacks = callbacks;
-        // null parent: the dialog becomes the parent when the view is set on it
+        // Pai null: o diálogo vira o pai quando a view é colocada nele
         this.content = LayoutInflater.from(context).inflate(R.layout.dialog_delete_trails, null);
         this.mode = selected != null ? Mode.SELECTED : Mode.RANGE;
     }
@@ -114,7 +114,7 @@ public final class DeleteTrailsDialog {
         if (initial == null) {
             initial = LocalDate.now();
         }
-        // DatePickerDialog months are 0-based, LocalDate months are 1-based
+        // No DatePickerDialog os meses começam em 0; no LocalDate, em 1
         new DatePickerDialog(context, (picker, year, month, day) -> {
             LocalDate picked = LocalDate.of(year, month + 1, day);
             int fieldId = isFrom ? R.id.edit_range_from : R.id.edit_range_to;
@@ -128,7 +128,7 @@ public final class DeleteTrailsDialog {
         }, initial.getYear(), initial.getMonthValue() - 1, initial.getDayOfMonth()).show();
     }
 
-    /** @return false when the range is invalid, keeping the dialog open */
+    /** @return false quando o intervalo é inválido, mantendo o diálogo aberto */
     private boolean confirm() {
         switch (mode) {
             case SELECTED:
@@ -155,7 +155,7 @@ public final class DeleteTrailsDialog {
             return false;
         }
 
-        // Whole days in the phone time zone: 00:00:00.000 of the first day to 23:59:59.999 of the last
+        // Dias inteiros no fuso do celular: de 00:00:00.000 do primeiro dia a 23:59:59.999 do último
         ZoneId zone = ZoneId.systemDefault();
         long fromMillis = fromDate.atStartOfDay(zone).toInstant().toEpochMilli();
         long toMillis = toDate.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli() - 1;

@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 /**
- * Creates and upgrades the SQLite schema: one trail has many track points (1:N).
- * Android calls onCreate only the first time the database file is opened, and onUpgrade
- * when DATABASE_VERSION is higher than the version stored in the file.
+ * Cria e atualiza o esquema SQLite: uma trilha tem muitos pontos (1:N).
+ * O Android chama onCreate só na primeira vez que o arquivo do banco é aberto, e onUpgrade
+ * quando DATABASE_VERSION é maior que a versão gravada no arquivo.
  */
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -64,7 +64,7 @@ public class DbHelper extends SQLiteOpenHelper {
         this(context, DATABASE_NAME);
     }
 
-    /** @param databaseName file name, or null for an in-memory database (used by the tests) */
+    /** @param databaseName nome do arquivo, ou null para um banco em memória (usado pelos testes) */
     public DbHelper(Context context, @Nullable String databaseName) {
         super(context.getApplicationContext(), databaseName, null, DATABASE_VERSION);
     }
