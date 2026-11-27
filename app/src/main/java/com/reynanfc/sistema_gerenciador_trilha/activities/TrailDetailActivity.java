@@ -34,6 +34,11 @@ import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Trail detail screen: loads one trail with its points by id, draws the route with start/end
+ * pins, frames the camera on it and shows the summary. The name can be edited here too.
+ * Flow and diagrams: docs/visualizar-trilha.md
+ */
 public class TrailDetailActivity extends AppCompatActivity {
 
     /** Id of the trail to show (long). Only the id travels in the Intent; the trail is loaded from the database */

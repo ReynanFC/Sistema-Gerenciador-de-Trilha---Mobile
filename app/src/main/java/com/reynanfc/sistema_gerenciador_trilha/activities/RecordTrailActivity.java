@@ -60,6 +60,12 @@ import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs;
 
 import java.util.ArrayList;
 
+/**
+ * Record trail screen: shows the map, asks for the location permission, follows the GPS and
+ * feeds every fix into {@link TrailRecorder} (time, speeds, distance, points). Finishing opens the
+ * summary sheet and saves the trail with its points through {@link TrailDao}.
+ * Flow and diagrams: docs/registrar-trilha.md
+ */
 public class RecordTrailActivity extends AppCompatActivity {
 
     private static final String[] LOCATION_PERMISSIONS = {
