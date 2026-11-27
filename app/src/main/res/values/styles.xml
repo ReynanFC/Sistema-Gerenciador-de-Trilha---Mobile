@@ -137,4 +137,81 @@
         <item name="android:textColor">@color/text_on_primary</item>
         <item name="cornerRadius">@dimen/card_corner_radius</item>
     </style>
+
+    <!-- Record trail screen: controls floating over the map -->
+    <style name="TrilhaApp.MapRoundButton" parent="">
+        <item name="android:layout_width">@dimen/map_control_size</item>
+        <item name="android:layout_height">@dimen/map_control_size</item>
+        <item name="android:background">@drawable/bg_map_round_button</item>
+        <item name="android:elevation">@dimen/map_control_elevation</item>
+        <item name="android:padding">@dimen/map_control_icon_padding</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <!-- Card floating over the map: shadow instead of outline -->
+    <style name="TrilhaApp.Card.Floating">
+        <item name="strokeWidth">0dp</item>
+        <item name="cardElevation">@dimen/map_control_elevation</item>
+    </style>
+
+    <style name="TrilhaApp.Stat" parent="" />
+
+    <style name="TrilhaApp.Stat.Column">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="TrilhaApp.Stat.Values">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:baselineAligned">true</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="TrilhaApp.Stat.Value">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:text">@string/record_value_zero</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">@dimen/text_stat_value</item>
+    </style>
+
+    <style name="TrilhaApp.Stat.Unit">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">@dimen/text_stat_unit</item>
+    </style>
+
+    <!-- Pause (white) and Finish (red) buttons side by side -->
+    <style name="TrilhaApp.Button.Map" parent="Widget.Material3.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textSize">@dimen/text_button</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:elevation">@dimen/map_control_elevation</item>
+        <item name="cornerRadius">@dimen/card_corner_radius</item>
+        <item name="iconGravity">textStart</item>
+    </style>
+
+    <style name="TrilhaApp.Button.Map.Pause">
+        <item name="backgroundTint">@color/surface</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="iconTint">@color/text_primary</item>
+        <item name="rippleColor">@color/outline</item>
+    </style>
+
+    <style name="TrilhaApp.Button.Map.Finish">
+        <item name="backgroundTint">@color/red_destructive</item>
+        <item name="android:textColor">@color/text_on_primary</item>
+        <item name="iconTint">@color/text_on_primary</item>
+    </style>
 </resources>

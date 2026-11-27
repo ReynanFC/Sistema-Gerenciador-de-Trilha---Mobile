@@ -39,4 +39,23 @@
     <string name="settings_footnote">Essas opções valem para as telas Registrar trilha e Visualizar trilha.</string>
     <string name="settings_save">Salvar configurações</string>
     <string name="settings_saved">Configurações salvas</string>
+
+    <!-- Record trail screen -->
+    <string name="record_recording">Gravando</string>
+    <string name="record_paused">Pausado</string>
+    <string name="record_time">Tempo</string>
+    <string name="record_speed">Velocidade</string>
+    <string name="record_max_speed">Vel. máx.</string>
+    <string name="record_distance">Distância</string>
+    <string name="record_timer_zero">00:00:00</string>
+    <string name="record_value_zero">0,0</string>
+    <string name="unit_speed">km/h</string>
+    <string name="unit_distance">km</string>
+    <string name="record_accuracy">Precisão ±%1$d m</string>
+    <string name="record_accuracy_waiting">Buscando GPS…</string>
+    <string name="record_settings_summary">%1$s · %2$s</string>
+    <string name="record_pause">Pausar</string>
+    <string name="record_resume">Retomar</string>
+    <string name="record_finish">Finalizar</string>
+    <string name="action_compass">Bússola</string>
 </resources>

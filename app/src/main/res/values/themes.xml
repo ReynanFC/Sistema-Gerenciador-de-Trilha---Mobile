@@ -10,6 +10,8 @@
         <item name="colorOnSurface">@color/text_primary</item>
         <item name="colorOnSurfaceVariant">@color/text_secondary</item>
         <item name="colorOutline">@color/outline</item>
+        <!-- Keeps elevated cards and chips pure white over the map (no Material 3 tint) -->
+        <item name="elevationOverlayEnabled">false</item>
     </style>
 
     <style name="Theme.Sistema_gerenciador_Trilha" parent="Base.Theme.Sistema_gerenciador_Trilha" />
