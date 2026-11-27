@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Trail list screen: app bar with delete action, summary line, list of cards, empty state and FAB.
+     Prototype: docs/prototipo/05-consultar-trilhas.png -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".activities.TrailListActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/surface"
+        app:menu="@menu/menu_trail_list"
+        app:navigationContentDescription="@string/action_back"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/title_trail_list"
+        app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_divider"
+        android:background="@color/outline" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/layout_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- "5 trilhas · 24,70 km no total"            "Mais recentes" -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="@dimen/spacing_medium"
+                android:paddingEnd="16dp"
+                android:paddingBottom="4dp">
+
+                <TextView
+                    android:id="@+id/text_trail_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_card_subtitle"
+                    tools:text="5 trilhas" />
+
+                <TextView
+                    android:id="@+id/text_total_distance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_card_subtitle"
+                    tools:text="· 24,70 km no total" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/list_sort_newest"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_metric" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_trails"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingStart="16dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="@dimen/list_fab_clearance"
+                tools:listitem="@layout/item_trail" />
+        </LinearLayout>
+
+        <!-- Empty state: shown instead of the list when there are no trails -->
+        <LinearLayout
+            android:id="@+id/layout_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_large"
+            android:visibility="gone"
+            tools:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/empty_icon"
+                android:layout_height="@dimen/empty_icon"
+                android:background="@drawable/bg_menu_icon"
+                android:importantForAccessibility="no"
+                android:padding="16dp"
+                android:src="@drawable/ic_route"
+                app:tint="@color/green_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/list_empty_title"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_card_title" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="@string/list_empty_message"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_card_subtitle" />
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_new_trail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:text="@string/list_new_trail"
+            android:textColor="@color/text_on_primary"
+            app:backgroundTint="@color/green_primary"
+            app:icon="@drawable/ic_add"
+            app:iconTint="@color/text_on_primary" />
+    </FrameLayout>
+</LinearLayout>

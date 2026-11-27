@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Trail detail screen: map with the route and floating top bar + info panel.
+     The map is drawn edge-to-edge; TrailDetailActivity pads the overlay with the system bar insets.
+     Prototype: docs/prototipo/08-visualizar-trilha.png -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".activities.TrailDetailActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/detail_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/map_overlay_margin">
+
+        <!-- Top bar: back, name + settings, edit -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_detail_top"
+            style="@style/TrilhaApp.Card.Floating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <ImageButton
+                    android:id="@+id/button_detail_back"
+                    style="@style/TrilhaApp.IconButton"
+                    android:contentDescription="@string/action_back"
+                    android:src="@drawable/ic_arrow_back"
+                    app:tint="@color/text_primary" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text_detail_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_card_title"
+                        tools:text="Volta da Lagoa" />
+
+                    <TextView
+                        android:id="@+id/text_detail_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/text_card_subtitle"
+                        tools:text="Mapa vetorial · North Up" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/button_detail_edit"
+                    style="@style/TrilhaApp.IconButton"
+                    android:contentDescription="@string/action_edit_name"
+                    android:src="@drawable/ic_edit"
+                    app:tint="@color/text_primary" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Info panel -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_detail_info"
+            style="@style/TrilhaApp.Card.Floating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/stats_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/detail_icon_container"
+                        android:layout_height="@dimen/detail_icon_container"
+                        android:background="@drawable/bg_menu_icon"
+                        android:importantForAccessibility="no"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_calendar"
+                        app:tint="@color/green_primary" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_medium"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TrilhaApp.Tile.Label"
+                            android:text="@string/detail_start" />
+
+                        <TextView
+                            android:id="@+id/text_detail_start"
+                            style="@style/TrilhaApp.DetailValue"
+                            tools:text="22/11/2026 · 06:30" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/toolbar_divider"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:background="@color/outline" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout style="@style/TrilhaApp.Stat.Column">
+
+                        <TextView
+                            style="@style/TrilhaApp.Tile.Label"
+                            android:text="@string/record_distance" />
+
+                        <TextView
+                            android:id="@+id/text_detail_distance"
+                            style="@style/TrilhaApp.DetailValue"
+                            tools:text="6,21 km" />
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/TrilhaApp.Stat.Column">
+
+                        <TextView
+                            style="@style/TrilhaApp.Tile.Label"
+                            android:text="@string/finish_duration" />
+
+                        <TextView
+                            android:id="@+id/text_detail_duration"
+                            style="@style/TrilhaApp.DetailValue"
+                            tools:text="1h 12min" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:orientation="horizontal">
+
+                    <LinearLayout style="@style/TrilhaApp.Stat.Column">
+
+                        <TextView
+                            style="@style/TrilhaApp.Tile.Label"
+                            android:text="@string/finish_average_speed" />
+
+                        <TextView
+                            android:id="@+id/text_detail_average_speed"
+                            style="@style/TrilhaApp.DetailValue"
+                            tools:text="5,2 km/h" />
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/TrilhaApp.Stat.Column">
+
+                        <TextView
+                            style="@style/TrilhaApp.Tile.Label"
+                            android:text="@string/finish_max_speed" />
+
+                        <TextView
+                            android:id="@+id/text_detail_max_speed"
+                            style="@style/TrilhaApp.DetailValue"
+                            tools:text="11,4 km/h" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Legend -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TrilhaApp.LegendItem"
+                        android:text="@string/detail_legend_start"
+                        app:drawableStartCompat="@drawable/legend_dot_start" />
+
+                    <TextView
+                        style="@style/TrilhaApp.LegendItem"
+                        android:text="@string/detail_legend_end"
+                        app:drawableStartCompat="@drawable/legend_dot_end" />
+
+                    <TextView
+                        android:id="@+id/text_legend_route"
+                        style="@style/TrilhaApp.LegendItem"
+                        android:text="@string/detail_legend_route"
+                        app:drawableStartCompat="@drawable/legend_line_route" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</FrameLayout>

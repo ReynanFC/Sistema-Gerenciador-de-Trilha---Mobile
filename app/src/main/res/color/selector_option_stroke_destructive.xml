@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Delete dialog option outline: red when selected, light grey otherwise -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/red_destructive" android:state_checked="true" />
+    <item android:color="@color/outline" />
+</selector>

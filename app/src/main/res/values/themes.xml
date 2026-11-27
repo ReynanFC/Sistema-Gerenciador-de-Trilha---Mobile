@@ -1,8 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Sistema_gerenciador_Trilha" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <!-- Base theme: always light, following the prototype -->
+    <style name="Base.Theme.Sistema_gerenciador_Trilha" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/green_primary</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
+        <item name="colorPrimaryContainer">@color/green_container</item>
+        <item name="colorError">@color/red_destructive</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="colorOutline">@color/outline</item>
+        <!-- Keeps elevated cards and chips pure white over the map (no Material 3 tint) -->
+        <item name="elevationOverlayEnabled">false</item>
     </style>
 
     <style name="Theme.Sistema_gerenciador_Trilha" parent="Base.Theme.Sistema_gerenciador_Trilha" />

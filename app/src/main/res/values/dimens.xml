@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="screen_margin">20dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">12dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+
+    <dimen name="card_corner_radius">16dp</dimen>
+    <dimen name="icon_corner_radius">12dp</dimen>
+    <dimen name="card_stroke_width">1dp</dimen>
+    <dimen name="min_touch_target">48dp</dimen>
+
+    <!-- Main screen -->
+    <dimen name="header_icon_container">56dp</dimen>
+    <dimen name="menu_icon_container">52dp</dimen>
+    <dimen name="menu_padding">18dp</dimen>
+    <dimen name="chevron_size">24dp</dimen>
+
+    <dimen name="text_app_title">32sp</dimen>
+    <dimen name="text_app_subtitle">15sp</dimen>
+    <dimen name="text_card_title">18sp</dimen>
+    <dimen name="text_card_subtitle">13sp</dimen>
+    <dimen name="text_section_label">12sp</dimen>
+    <dimen name="text_chip">13sp</dimen>
+
+    <!-- Settings screen -->
+    <dimen name="option_thumbnail">64dp</dimen>
+    <dimen name="option_padding">14dp</dimen>
+    <dimen name="option_selected_stroke_width">2dp</dimen>
+    <dimen name="text_option_title">17sp</dimen>
+    <dimen name="text_badge">11sp</dimen>
+    <dimen name="text_footnote">13sp</dimen>
+    <dimen name="text_button">16sp</dimen>
+    <dimen name="button_height">56dp</dimen>
+    <dimen name="toolbar_divider">1dp</dimen>
+
+    <!-- Record trail screen -->
+    <dimen name="map_overlay_margin">16dp</dimen>
+    <dimen name="map_control_size">44dp</dimen>
+    <dimen name="map_control_icon_padding">10dp</dimen>
+    <dimen name="map_control_elevation">4dp</dimen>
+    <dimen name="recording_dot">8dp</dimen>
+    <dimen name="accuracy_stroke_width">1.5dp</dimen>
+    <dimen name="stats_padding">18dp</dimen>
+    <dimen name="text_timer">40sp</dimen>
+    <dimen name="text_stat_value">20sp</dimen>
+    <dimen name="text_stat_unit">13sp</dimen>
+
+    <!-- Finish sheet / detail tiles -->
+    <dimen name="tile_padding">12dp</dimen>
+    <dimen name="text_tile_value">16sp</dimen>
+    <dimen name="text_sheet_title">22sp</dimen>
+    <dimen name="sheet_handle_width">36dp</dimen>
+    <dimen name="sheet_handle_height">4dp</dimen>
+
+    <!-- Trail list -->
+    <dimen name="list_icon_container">48dp</dimen>
+    <dimen name="list_fab_clearance">96dp</dimen>
+    <dimen name="text_metric">12sp</dimen>
+    <dimen name="empty_icon">64dp</dimen>
+
+    <!-- Dialogs -->
+    <dimen name="dialog_padding">24dp</dimen>
+    <dimen name="dialog_icon_container">48dp</dimen>
+    <dimen name="text_dialog_title">20sp</dimen>
+
+    <!-- Trail detail -->
+    <dimen name="detail_icon_container">40dp</dimen>
+    <dimen name="text_detail_value">18sp</dimen>
+    <dimen name="route_width">5dp</dimen>
+    <dimen name="detail_bounds_padding">48dp</dimen>
+</resources>

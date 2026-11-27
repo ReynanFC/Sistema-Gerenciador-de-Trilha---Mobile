@@ -1,4 +1,4 @@
 /**
- * Adapters de RecyclerView, como o TrilhaAdapter da lista de trilhas.
+ * RecyclerView adapters, such as TrailAdapter for the trail list.
  */
 package com.reynanfc.sistema_gerenciador_trilha.adapter;

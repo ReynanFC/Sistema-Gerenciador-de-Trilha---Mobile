@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Prototype palette (docs/prototipo) -->
+    <color name="green_primary">#2E7D32</color>
+    <color name="green_container">#E3EFE3</color>
+    <color name="red_destructive">#B3261E</color>
+
+    <!-- Surfaces -->
+    <color name="background">#F4F6F2</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#E9ECE6</color>
+    <color name="outline">#E1E5DE</color>
+
+    <!-- Texts -->
+    <color name="text_primary">#1B1F1A</color>
+    <color name="text_secondary">#5F665C</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_on_primary_secondary">#E6FFFFFF</color>
+    <color name="header_icon_background">#29FFFFFF</color>
+
+    <!-- Route on the map: blue on vector, yellow on satellite -->
+    <color name="route_vector">#1565C0</color>
+    <color name="route_satellite">#FFC94D</color>
+
+    <!-- Selected option card -->
+    <color name="green_selected_background">#F1F7EF</color>
+    <color name="compass_north">#C62828</color>
+    <color name="compass_south">#9E9E9E</color>
+
+
+    <!-- Record trail screen -->
+    <color name="recording_dot">#E57373</color>
+    <color name="waiting_dot">#9E9E9E</color>
+    <!-- GPS accuracy circle: route blue with alpha so the map stays visible underneath -->
+    <color name="accuracy_fill">#331565C0</color>
+    <color name="accuracy_stroke">#991565C0</color>
+
+    <!-- Destructive dialog icon background -->
+    <color name="red_container">#FBE9E7</color>
 </resources>

@@ -1,3 +1,155 @@
 <resources>
-    <string name="app_name">Sistema_gerenciador_Trilha</string>
+    <string name="app_name">TrilhaApp</string>
+
+    <!-- Screen titles -->
+    <string name="title_settings">Configurações</string>
+    <string name="title_record_trail">Registrar trilha</string>
+    <string name="title_trail_list">Minhas trilhas</string>
+    <string name="title_trail_detail">Visualizar trilha</string>
+
+    <!-- Main screen -->
+    <string name="main_subtitle">Registre, consulte e reviva suas trilhas.</string>
+    <string name="menu_record_title">Registrar trilha</string>
+    <string name="menu_record_subtitle">Grave seu percurso com o GPS</string>
+    <string name="menu_trails_title">Consultar trilhas</string>
+    <string name="menu_trails_subtitle">Ver, editar e apagar trilhas salvas</string>
+    <string name="menu_settings_title">Configurações</string>
+    <string name="menu_settings_subtitle">Tipo de mapa e forma de navegação</string>
+    <string name="main_current_settings">Configuração atual</string>
+
+    <!-- Settings values (reused by the chips and the Settings screen) -->
+    <string name="settings_map_vector">Mapa vetorial</string>
+    <string name="settings_map_satellite">Mapa satélite</string>
+    <string name="settings_north_up">North Up</string>
+    <string name="settings_course_up">Course Up</string>
+
+    <!-- Common actions -->
+    <string name="action_back">Voltar</string>
+
+    <!-- Settings screen -->
+    <string name="settings_section_map_type">Tipo de mapa</string>
+    <string name="settings_map_vector_title">Vetorial</string>
+    <string name="settings_map_vector_description">Ruas, parques e nomes de lugares.</string>
+    <string name="settings_map_satellite_title">Satélite</string>
+    <string name="settings_map_satellite_description">Imagem aérea do terreno.</string>
+    <string name="settings_section_navigation">Forma de navegação</string>
+    <string name="settings_north_up_description">O mapa fica sempre orientado para o norte.</string>
+    <string name="settings_course_up_description">O mapa gira e acompanha a direção do seu deslocamento (rumo).</string>
+    <string name="settings_default_badge">Padrão</string>
+    <string name="settings_footnote">Essas opções valem para as telas Registrar trilha e Visualizar trilha.</string>
+    <string name="settings_save">Salvar configurações</string>
+    <string name="settings_saved">Configurações salvas</string>
+
+    <!-- Record trail screen -->
+    <string name="record_recording">Gravando</string>
+    <string name="record_paused">Pausado</string>
+    <string name="record_waiting_gps">Aguardando GPS</string>
+    <string name="record_time">Tempo</string>
+    <string name="record_speed">Velocidade</string>
+    <string name="record_max_speed">Vel. máx.</string>
+    <string name="record_distance">Distância</string>
+    <string name="record_timer_zero">00:00:00</string>
+    <string name="record_value_zero">0,0</string>
+    <string name="record_distance_zero">0,00</string>
+    <string name="unit_speed">km/h</string>
+    <string name="unit_distance">km</string>
+    <string name="record_accuracy">Precisão ±%1$d m</string>
+    <string name="record_accuracy_waiting">Buscando GPS…</string>
+    <string name="record_settings_summary">%1$s · %2$s</string>
+    <string name="record_pause">Pausar</string>
+    <string name="record_resume">Retomar</string>
+    <string name="record_finish">Finalizar</string>
+    <string name="action_compass">Bússola</string>
+    <string name="record_accuracy_no_permission">Sem permissão de GPS</string>
+    <string name="record_accuracy_gps_off">GPS desligado</string>
+    <string name="location_disabled_message">Ative a localização do aparelho para gravar a trilha.</string>
+
+    <!-- Location permission -->
+    <string name="permission_location_title">Permissão de localização</string>
+    <string name="permission_location_rationale">Para gravar o percurso, o TrilhaApp precisa acessar a localização precisa do aparelho enquanto esta tela estiver aberta.</string>
+    <string name="permission_location_denied_message">Sem acesso à localização não é possível gravar a trilha. Você pode tentar de novo ou voltar ao menu.</string>
+    <string name="permission_location_approximate">Localização aproximada: o percurso gravado pode ficar impreciso.</string>
+    <string name="permission_continue">Continuar</string>
+    <string name="permission_try_again">Tentar novamente</string>
+    <string name="permission_open_settings">Abrir configurações</string>
+
+    <!-- Finish trail sheet -->
+    <string name="finish_title">Finalizar trilha</string>
+    <string name="finish_subtitle">Dê um nome para salvar o percurso.</string>
+    <string name="finish_name_label">Nome da trilha</string>
+    <string name="finish_name_hint">Ex.: Trilha do Parque</string>
+    <string name="finish_name_required">Informe um nome para a trilha</string>
+    <string name="finish_start">Início</string>
+    <string name="finish_end">Fim</string>
+    <string name="finish_duration">Duração</string>
+    <string name="finish_average_speed">Vel. média</string>
+    <string name="finish_max_speed">Vel. máxima</string>
+    <string name="finish_discard">Descartar</string>
+    <string name="finish_save">Salvar trilha</string>
+    <string name="finish_saved">Trilha salva</string>
+    <string name="finish_save_error">Não foi possível salvar a trilha</string>
+    <string name="finish_discard_title">Descartar trilha?</string>
+    <string name="finish_discard_message">O percurso gravado será perdido.</string>
+    <string name="finish_no_points_title">Nenhuma posição gravada</string>
+    <string name="finish_no_points_message">O GPS ainda não registrou nenhum ponto válido. Continue gravando ou descarte a trilha.</string>
+    <string name="finish_keep_recording">Continuar gravando</string>
+    <string name="value_km">%1$s km</string>
+    <string name="value_kmh">%1$s km/h</string>
+    <string name="action_cancel">Cancelar</string>
+
+    <!-- Trail list screen -->
+    <string name="list_delete_trails">Apagar trilhas</string>
+    <plurals name="list_trail_count">
+        <item quantity="one">%d trilha</item>
+        <item quantity="other">%d trilhas</item>
+    </plurals>
+    <string name="list_total_distance">· %1$s km no total</string>
+    <string name="list_sort_newest">Mais recentes</string>
+    <string name="list_new_trail">Nova trilha</string>
+    <string name="list_empty_title">Nenhuma trilha ainda</string>
+    <string name="list_empty_message">Grave sua primeira trilha tocando em Nova trilha.</string>
+    <string name="list_load_error">Não foi possível carregar as trilhas</string>
+    <string name="action_rename">Renomear</string>
+    <string name="action_delete">Apagar</string>
+
+    <!-- Rename dialog -->
+    <string name="rename_title">Renomear trilha</string>
+    <string name="rename_recorded_at">Registrada em %1$s</string>
+    <string name="rename_name_label">Nome</string>
+    <string name="rename_name_required">O nome não pode ficar vazio</string>
+    <string name="rename_saved">Nome atualizado</string>
+    <string name="rename_error">Não foi possível renomear a trilha</string>
+    <string name="action_save">Salvar</string>
+
+    <!-- Delete dialog -->
+    <string name="delete_title">Apagar trilhas</string>
+    <string name="delete_option_selected">Trilha selecionada</string>
+    <string name="delete_option_range">Trilhas em um intervalo</string>
+    <string name="delete_option_range_description">Escolha as datas inicial e final</string>
+    <string name="delete_option_all">Todas as trilhas</string>
+    <plurals name="delete_all_description">
+        <item quantity="one">%d trilha será apagada</item>
+        <item quantity="other">%d trilhas serão apagadas</item>
+    </plurals>
+    <string name="delete_from">De</string>
+    <string name="delete_to">Até</string>
+    <string name="delete_pick_dates">Escolha as duas datas</string>
+    <string name="delete_inverted_range">A data inicial é depois da final</string>
+    <string name="delete_warning">Essa ação não pode ser desfeita.</string>
+    <string name="delete_selected_description">%1$s · %2$s</string>
+    <plurals name="delete_done">
+        <item quantity="one">%d trilha apagada</item>
+        <item quantity="other">%d trilhas apagadas</item>
+    </plurals>
+    <string name="delete_nothing">Nenhuma trilha para apagar</string>
+    <string name="delete_error">Não foi possível apagar as trilhas</string>
+
+    <!-- Trail detail screen -->
+    <string name="detail_not_found">Trilha não encontrada</string>
+    <string name="detail_start">Início</string>
+    <string name="detail_legend_start">Início</string>
+    <string name="detail_legend_end">Fim</string>
+    <string name="detail_legend_route">Percurso</string>
+    <string name="detail_no_points">Esta trilha não tem pontos para desenhar</string>
+    <string name="action_edit_name">Editar nome</string>
 </resources>

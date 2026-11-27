@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Record trail screen: full-screen map with floating controls.
+     The map is drawn behind the system bars (edge-to-edge); RecordTrailActivity pads the overlay with the insets.
+     Prototype: docs/prototipo/03-registrar-trilha.png -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/record_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".activities.RecordTrailActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/record_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/map_overlay_margin">
+
+        <!-- Top bar: back, recording status, compass -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/button_back"
+                style="@style/TrilhaApp.MapRoundButton"
+                android:layout_gravity="start|center_vertical"
+                android:contentDescription="@string/action_back"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/text_recording_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_map_pill"
+                android:drawablePadding="@dimen/spacing_small"
+                android:elevation="@dimen/map_control_elevation"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:paddingStart="14dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="6dp"
+                android:text="@string/record_recording"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_chip"
+                app:drawableStartCompat="@drawable/dot_recording" />
+
+            <ImageButton
+                android:id="@+id/button_compass"
+                style="@style/TrilhaApp.MapRoundButton"
+                android:layout_gravity="end|center_vertical"
+                android:contentDescription="@string/action_compass"
+                android:src="@drawable/ic_compass" />
+        </FrameLayout>
+
+        <!-- Stats card: timer + speed, max speed and distance -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/TrilhaApp.Card.Floating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_medium">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/stats_padding">
+
+                <TextView
+                    style="@style/TrilhaApp.SectionLabel"
+                    android:text="@string/record_time" />
+
+                <TextView
+                    android:id="@+id/text_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:fontFeatureSettings="tnum"
+                    android:text="@string/record_timer_zero"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_timer"
+                    tools:text="00:43:30" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/toolbar_divider"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:background="@color/outline" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout style="@style/TrilhaApp.Stat.Column">
+
+                        <TextView
+                            style="@style/TrilhaApp.SectionLabel"
+                            android:text="@string/record_speed" />
+
+                        <LinearLayout style="@style/TrilhaApp.Stat.Values">
+
+                            <TextView
+                                android:id="@+id/text_speed"
+                                style="@style/TrilhaApp.Stat.Value"
+                                tools:text="5,2" />
+
+                            <TextView
+                                style="@style/TrilhaApp.Stat.Unit"
+                                android:text="@string/unit_speed" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/TrilhaApp.Stat.Column">
+
+                        <TextView
+                            style="@style/TrilhaApp.SectionLabel"
+                            android:text="@string/record_max_speed" />
+
+                        <LinearLayout style="@style/TrilhaApp.Stat.Values">
+
+                            <TextView
+                                android:id="@+id/text_max_speed"
+                                style="@style/TrilhaApp.Stat.Value"
+                                tools:text="8,9" />
+
+                            <TextView
+                                style="@style/TrilhaApp.Stat.Unit"
+                                android:text="@string/unit_speed" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/TrilhaApp.Stat.Column">
+
+                        <TextView
+                            style="@style/TrilhaApp.SectionLabel"
+                            android:text="@string/record_distance" />
+
+                        <LinearLayout style="@style/TrilhaApp.Stat.Values">
+
+                            <TextView
+                                android:id="@+id/text_distance"
+                                style="@style/TrilhaApp.Stat.Value"
+                                android:text="@string/record_distance_zero"
+                                tools:text="3,48" />
+
+                            <TextView
+                                style="@style/TrilhaApp.Stat.Unit"
+                                android:text="@string/unit_distance" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- GPS accuracy and current settings -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_accuracy"
+                style="@style/TrilhaApp.ChipInfo"
+                android:elevation="@dimen/map_control_elevation"
+                android:text="@string/record_accuracy_waiting"
+                app:chipIcon="@drawable/ic_gps_fixed"
+                app:chipIconSize="16dp"
+                app:chipIconTint="@color/route_vector"
+                tools:text="Precisão ±12 m" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_settings"
+                style="@style/TrilhaApp.ChipInfo"
+                android:elevation="@dimen/map_control_elevation"
+                tools:text="Vetorial · North Up" />
+        </LinearLayout>
+
+        <!-- Pause / Finish -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_pause"
+                style="@style/TrilhaApp.Button.Map.Pause"
+                android:layout_marginEnd="@dimen/spacing_medium"
+                android:text="@string/record_pause"
+                app:icon="@drawable/ic_pause" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_finish"
+                style="@style/TrilhaApp.Button.Map.Finish"
+                android:text="@string/record_finish"
+                app:icon="@drawable/ic_stop" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One trail in the list: icon, name, start date/time, distance and duration pills, edit and delete.
+     Bound by TrailAdapter. -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/TrilhaApp.Card.Menu">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/min_touch_target"
+        android:orientation="horizontal"
+        android:paddingStart="14dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="14dp">
+
+        <ImageView
+            android:layout_width="@dimen/list_icon_container"
+            android:layout_height="@dimen/list_icon_container"
+            android:background="@drawable/bg_menu_icon"
+            android:importantForAccessibility="no"
+            android:padding="12dp"
+            android:src="@drawable/ic_route"
+            app:tint="@color/green_primary" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_trail_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_option_title"
+                tools:text="Trilha do Parque" />
+
+            <TextView
+                android:id="@+id/text_trail_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_card_subtitle"
+                tools:text="24/11/2026 · 07:12" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_trail_distance"
+                    style="@style/TrilhaApp.MetricPill"
+                    tools:text="3,48 km" />
+
+                <TextView
+                    android:id="@+id/text_trail_duration"
+                    style="@style/TrilhaApp.MetricPill"
+                    android:layout_marginStart="6dp"
+                    tools:text="42 min" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/button_rename"
+            style="@style/TrilhaApp.IconButton"
+            android:contentDescription="@string/action_rename"
+            android:src="@drawable/ic_edit"
+            app:tint="@color/text_primary" />
+
+        <ImageButton
+            android:id="@+id/button_delete"
+            style="@style/TrilhaApp.IconButton"
+            android:contentDescription="@string/action_delete"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/red_destructive" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

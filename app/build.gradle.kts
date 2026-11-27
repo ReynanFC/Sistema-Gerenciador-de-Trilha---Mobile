@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
-// Lê a chave do Google Maps do local.properties (arquivo fora do Git),
-// para que a chave nunca fique no código versionado.
+// Reads the Google Maps key from local.properties (not tracked by Git),
+// so the key never ends up in version control.
 val localProperties = Properties().apply {
     val file = rootProject.file("local.properties")
     if (file.exists()) file.inputStream().use { load(it) }
@@ -26,7 +26,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Injeta a chave no AndroidManifest via ${MAPS_API_KEY}
+        // Injects the key into AndroidManifest via ${MAPS_API_KEY}
         manifestPlaceholders["MAPS_API_KEY"] = localProperties.getProperty("MAPS_API_KEY", "")
     }
 
@@ -38,8 +38,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 }
 
@@ -50,7 +50,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.recyclerview)
 
-    // Google Maps SDK (mapa) e Fused Location Provider (GPS)
+    // Google Maps SDK (map) and Fused Location Provider (GPS)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
     testImplementation(libs.junit)

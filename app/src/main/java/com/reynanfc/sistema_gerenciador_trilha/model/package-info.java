@@ -1,4 +1,4 @@
 /**
- * Classes de modelo (POJOs) como Trilha e Ponto: apenas atributos, construtores e getters/setters.
+ * Model classes: Trail (mutable POJO, persisted and renamed) and TrackPoint (immutable record of a GPS fix).
  */
 package com.reynanfc.sistema_gerenciador_trilha.model;
