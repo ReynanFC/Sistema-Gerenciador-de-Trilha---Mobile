@@ -1,7 +1,9 @@
 package com.reynanfc.sistema_gerenciador_trilha.activities;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -21,9 +23,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.reynanfc.sistema_gerenciador_trilha.R;
 import com.reynanfc.sistema_gerenciador_trilha.database.TrailDao;
+import com.reynanfc.sistema_gerenciador_trilha.dialog.RenameTrailDialog;
 import com.reynanfc.sistema_gerenciador_trilha.model.Trail;
 import com.reynanfc.sistema_gerenciador_trilha.model.TrackPoint;
 import com.reynanfc.sistema_gerenciador_trilha.util.Async;
+import com.reynanfc.sistema_gerenciador_trilha.util.Formatters;
 import com.reynanfc.sistema_gerenciador_trilha.util.MapIcons;
 import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs;
 
@@ -63,6 +67,8 @@ public class TrailDetailActivity extends AppCompatActivity {
 
         setupWindowInsets();
         findViewById(R.id.button_detail_back).setOnClickListener(v -> finish());
+        findViewById(R.id.button_detail_edit).setOnClickListener(v -> renameTrail());
+        showSettingsSummary();
         setupMap();
         loadTrail();
     }
@@ -89,9 +95,53 @@ public class TrailDetailActivity extends AppCompatActivity {
                         return;
                     }
                     trail = loaded;
+                    showInfo(loaded);
                     drawRouteWhenReady();
                 },
                 error -> closeWithError());
+    }
+
+    private void showInfo(Trail trail) {
+        ((TextView) findViewById(R.id.text_detail_name)).setText(trail.getName());
+        ((TextView) findViewById(R.id.text_detail_start)).setText(Formatters.dateTime(trail.getStartTime()));
+        ((TextView) findViewById(R.id.text_detail_distance)).setText(
+                getString(R.string.value_km, Formatters.distanceKm(trail.getDistance())));
+        ((TextView) findViewById(R.id.text_detail_duration)).setText(Formatters.shortDuration(trail.getDurationMillis()));
+        ((TextView) findViewById(R.id.text_detail_average_speed)).setText(
+                getString(R.string.value_kmh, Formatters.speedKmh(trail.getAverageSpeed())));
+        ((TextView) findViewById(R.id.text_detail_max_speed)).setText(
+                getString(R.string.value_kmh, Formatters.speedKmh(trail.getMaxSpeed())));
+    }
+
+    private void showSettingsSummary() {
+        ((TextView) findViewById(R.id.text_detail_settings)).setText(getString(R.string.record_settings_summary,
+                getString(settingsPrefs.getMapType().labelResId),
+                getString(settingsPrefs.getNavigationMode().labelResId)));
+
+        // The legend line takes the same color as the route
+        Drawable legendLine = ContextCompat.getDrawable(this, R.drawable.legend_line_route);
+        if (legendLine != null) {
+            legendLine = legendLine.mutate();
+            legendLine.setTint(ContextCompat.getColor(this, routeColorRes()));
+            ((TextView) findViewById(R.id.text_legend_route))
+                    .setCompoundDrawablesRelativeWithIntrinsicBounds(legendLine, null, null, null);
+        }
+    }
+
+    // Same dialog as the list screen; the new name is saved here and shown right away
+    private void renameTrail() {
+        if (trail == null) {
+            return;
+        }
+        Trail current = trail;
+        RenameTrailDialog.show(this, current, newName ->
+                Async.run(() -> trailDao.rename(current.getId(), newName),
+                        renamed -> {
+                            current.setName(newName);
+                            ((TextView) findViewById(R.id.text_detail_name)).setText(newName);
+                            Toast.makeText(this, R.string.rename_saved, Toast.LENGTH_SHORT).show();
+                        },
+                        error -> Toast.makeText(this, R.string.rename_error, Toast.LENGTH_LONG).show()));
     }
 
     // The map and the trail arrive asynchronously and in any order: draw once both exist
