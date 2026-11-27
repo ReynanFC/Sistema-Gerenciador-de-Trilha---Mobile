@@ -204,7 +204,9 @@ public class RecordTrailActivity extends AppCompatActivity {
 
         ((TextView) content.findViewById(R.id.text_finish_start)).setText(Formatters.dateTime(recorder.getStartTime()));
         ((TextView) content.findViewById(R.id.text_finish_end)).setText(Formatters.dateTime(endTime));
-        ((TextView) content.findViewById(R.id.text_finish_duration)).setText(Formatters.duration(elapsed));
+        // Duration = end - start (what the list and detail show); the timer above shows moving time only
+        ((TextView) content.findViewById(R.id.text_finish_duration)).setText(
+                Formatters.duration(endTime - recorder.getStartTime()));
         ((TextView) content.findViewById(R.id.text_finish_distance)).setText(
                 getString(R.string.value_km, Formatters.distanceKm(recorder.getDistance())));
         ((TextView) content.findViewById(R.id.text_finish_average_speed)).setText(
