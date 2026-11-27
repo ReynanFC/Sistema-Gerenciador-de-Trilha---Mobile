@@ -29,4 +29,7 @@
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Record trail screen -->
+    <color name="recording_dot">#E57373</color>
 </resources>

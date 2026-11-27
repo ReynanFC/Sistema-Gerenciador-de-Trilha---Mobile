@@ -35,4 +35,15 @@
     <dimen name="text_button">16sp</dimen>
     <dimen name="button_height">56dp</dimen>
     <dimen name="toolbar_divider">1dp</dimen>
+
+    <!-- Record trail screen -->
+    <dimen name="map_overlay_margin">16dp</dimen>
+    <dimen name="map_control_size">44dp</dimen>
+    <dimen name="map_control_icon_padding">10dp</dimen>
+    <dimen name="map_control_elevation">4dp</dimen>
+    <dimen name="recording_dot">8dp</dimen>
+    <dimen name="stats_padding">18dp</dimen>
+    <dimen name="text_timer">40sp</dimen>
+    <dimen name="text_stat_value">20sp</dimen>
+    <dimen name="text_stat_unit">13sp</dimen>
 </resources>
