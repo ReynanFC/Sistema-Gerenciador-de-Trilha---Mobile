@@ -58,4 +58,14 @@
     <string name="record_resume">Retomar</string>
     <string name="record_finish">Finalizar</string>
     <string name="action_compass">Bússola</string>
+    <string name="record_accuracy_no_permission">Sem permissão de GPS</string>
+
+    <!-- Location permission -->
+    <string name="permission_location_title">Permissão de localização</string>
+    <string name="permission_location_rationale">Para gravar o percurso, o TrilhaApp precisa acessar a localização precisa do aparelho enquanto esta tela estiver aberta.</string>
+    <string name="permission_location_denied_message">Sem acesso à localização não é possível gravar a trilha. Você pode tentar de novo ou voltar ao menu.</string>
+    <string name="permission_location_approximate">Localização aproximada: o percurso gravado pode ficar impreciso.</string>
+    <string name="permission_continue">Continuar</string>
+    <string name="permission_try_again">Tentar novamente</string>
+    <string name="permission_open_settings">Abrir configurações</string>
 </resources>
