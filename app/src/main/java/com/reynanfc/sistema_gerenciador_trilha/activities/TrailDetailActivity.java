@@ -3,7 +3,6 @@ package com.reynanfc.sistema_gerenciador_trilha.activities;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.reynanfc.sistema_gerenciador_trilha.R;
 import com.reynanfc.sistema_gerenciador_trilha.database.TrailDao;
+import com.reynanfc.sistema_gerenciador_trilha.databinding.ActivityTrailDetailBinding;
 import com.reynanfc.sistema_gerenciador_trilha.dialog.RenameTrailDialog;
 import com.reynanfc.sistema_gerenciador_trilha.model.Trail;
 import com.reynanfc.sistema_gerenciador_trilha.model.TrackPoint;
@@ -47,6 +47,7 @@ public class TrailDetailActivity extends AppCompatActivity {
     private static final long NO_ID = -1;
     private static final float SINGLE_POINT_ZOOM = 17f;
 
+    private ActivityTrailDetailBinding binding;
     private long trailId;
     private SettingsPrefs settingsPrefs;
     private TrailDao trailDao;
@@ -66,13 +67,14 @@ public class TrailDetailActivity extends AppCompatActivity {
         }
 
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_trail_detail);
+        binding = ActivityTrailDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         settingsPrefs = new SettingsPrefs(this);
         trailDao = new TrailDao(this);
 
         setupWindowInsets();
-        findViewById(R.id.button_detail_back).setOnClickListener(v -> finish());
-        findViewById(R.id.button_detail_edit).setOnClickListener(v -> renameTrail());
+        binding.buttonDetailBack.setOnClickListener(v -> finish());
+        binding.buttonDetailEdit.setOnClickListener(v -> renameTrail());
         showSettingsSummary();
         setupMap();
         loadTrail();
@@ -107,19 +109,19 @@ public class TrailDetailActivity extends AppCompatActivity {
     }
 
     private void showInfo(Trail trail) {
-        ((TextView) findViewById(R.id.text_detail_name)).setText(trail.getName());
-        ((TextView) findViewById(R.id.text_detail_start)).setText(Formatters.dateTime(trail.getStartTime()));
-        ((TextView) findViewById(R.id.text_detail_distance)).setText(
+        binding.textDetailName.setText(trail.getName());
+        binding.textDetailStart.setText(Formatters.dateTime(trail.getStartTime()));
+        binding.textDetailDistance.setText(
                 getString(R.string.value_km, Formatters.distanceKm(trail.getDistance())));
-        ((TextView) findViewById(R.id.text_detail_duration)).setText(Formatters.shortDuration(trail.getDurationMillis()));
-        ((TextView) findViewById(R.id.text_detail_average_speed)).setText(
+        binding.textDetailDuration.setText(Formatters.shortDuration(trail.getDurationMillis()));
+        binding.textDetailAverageSpeed.setText(
                 getString(R.string.value_kmh, Formatters.speedKmh(trail.getAverageSpeed())));
-        ((TextView) findViewById(R.id.text_detail_max_speed)).setText(
+        binding.textDetailMaxSpeed.setText(
                 getString(R.string.value_kmh, Formatters.speedKmh(trail.getMaxSpeed())));
     }
 
     private void showSettingsSummary() {
-        ((TextView) findViewById(R.id.text_detail_settings)).setText(getString(R.string.record_settings_summary,
+        binding.textDetailSettings.setText(getString(R.string.record_settings_summary,
                 getString(settingsPrefs.getMapType().labelResId),
                 getString(settingsPrefs.getNavigationMode().labelResId)));
 
@@ -128,7 +130,7 @@ public class TrailDetailActivity extends AppCompatActivity {
         if (legendLine != null) {
             legendLine = legendLine.mutate();
             legendLine.setTint(ContextCompat.getColor(this, routeColorRes()));
-            ((TextView) findViewById(R.id.text_legend_route))
+            binding.textLegendRoute
                     .setCompoundDrawablesRelativeWithIntrinsicBounds(legendLine, null, null, null);
         }
     }
@@ -143,7 +145,7 @@ public class TrailDetailActivity extends AppCompatActivity {
                 Async.run(() -> trailDao.rename(current.getId(), newName),
                         renamed -> {
                             current.setName(newName);
-                            ((TextView) findViewById(R.id.text_detail_name)).setText(newName);
+                            binding.textDetailName.setText(newName);
                             Toast.makeText(this, R.string.rename_saved, Toast.LENGTH_SHORT).show();
                         },
                         error -> Toast.makeText(this, R.string.rename_error, Toast.LENGTH_LONG).show()));
@@ -186,9 +188,9 @@ public class TrailDetailActivity extends AppCompatActivity {
      * e pelo painel de informações, então o percurso fica na parte visível entre eles.
      */
     private void frameRoute(List<LatLng> route) {
-        View overlay = findViewById(R.id.detail_overlay);
-        View topCard = findViewById(R.id.card_detail_top);
-        View infoCard = findViewById(R.id.card_detail_info);
+        View overlay = binding.detailOverlay;
+        View topCard = binding.cardDetailTop;
+        View infoCard = binding.cardDetailInfo;
         googleMap.setPadding(0, topCard.getBottom(), 0, overlay.getHeight() - infoCard.getTop());
 
         if (route.size() == 1) {
@@ -222,7 +224,7 @@ public class TrailDetailActivity extends AppCompatActivity {
     }
 
     private void setupWindowInsets() {
-        View overlay = findViewById(R.id.detail_overlay);
+        View overlay = binding.detailOverlay;
 
         int initialLeft = overlay.getPaddingLeft();
         int initialTop = overlay.getPaddingTop();
