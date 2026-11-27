@@ -37,6 +37,11 @@ android {
             }
         }
     }
+    // Generates a binding class per layout (e.g. ActivityMainBinding), replacing findViewById
+    buildFeatures {
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
