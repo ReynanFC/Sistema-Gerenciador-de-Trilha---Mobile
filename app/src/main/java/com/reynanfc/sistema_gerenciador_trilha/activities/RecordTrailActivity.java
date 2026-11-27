@@ -1,8 +1,11 @@
 package com.reynanfc.sistema_gerenciador_trilha.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -11,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,12 +23,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.reynanfc.sistema_gerenciador_trilha.R;
+import com.reynanfc.sistema_gerenciador_trilha.location.LocationTracker;
 import com.reynanfc.sistema_gerenciador_trilha.util.SettingsPrefs;
 
 public class RecordTrailActivity extends AppCompatActivity {
@@ -34,15 +42,27 @@ public class RecordTrailActivity extends AppCompatActivity {
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
 
+    private static final float INITIAL_ZOOM = 17f;
+
     private SettingsPrefs settingsPrefs;
     @Nullable
     private GoogleMap googleMap;
     private Chip chipAccuracy;
+    private LocationTracker locationTracker;
+    private boolean hasLocationPermission;
+    private boolean cameraCentered;
 
     // Must be registered before the Activity is started, so it is a field and not created on demand
     private final ActivityResultLauncher<String[]> locationPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
                     result -> onLocationPermissionResult());
+
+    private final ActivityResultLauncher<IntentSenderRequest> locationSettingsLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result -> {
+                if (result.getResultCode() != RESULT_OK) {
+                    onDeviceLocationOff();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +72,28 @@ public class RecordTrailActivity extends AppCompatActivity {
 
         settingsPrefs = new SettingsPrefs(this);
         chipAccuracy = findViewById(R.id.chip_accuracy);
+        locationTracker = new LocationTracker(this, this::onLocation);
 
         setupWindowInsets();
         findViewById(R.id.button_back).setOnClickListener(v -> finish());
         showCurrentSettings();
         setupMap();
         checkLocationPermission();
+    }
+
+    // GPS only runs while the screen is visible; the permission result arrives before onResume
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (hasLocationPermission) {
+            locationTracker.start();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        locationTracker.stop();
     }
 
     private boolean hasPermission(String permission) {
@@ -87,7 +123,52 @@ public class RecordTrailActivity extends AppCompatActivity {
     }
 
     private void onLocationPermissionGranted() {
+        hasLocationPermission = true;
         chipAccuracy.setText(R.string.record_accuracy_waiting);
+        enableMyLocationLayer();
+        checkDeviceLocation();
+    }
+
+    // If the device location is off, Play Services shows a dialog that turns it on with one tap
+    private void checkDeviceLocation() {
+        locationTracker.checkLocationSettings().addOnFailureListener(this, e -> {
+            if (e instanceof ResolvableApiException) {
+                PendingIntent resolution = ((ResolvableApiException) e).getResolution();
+                locationSettingsLauncher.launch(new IntentSenderRequest.Builder(resolution).build());
+            } else {
+                onDeviceLocationOff();
+            }
+        });
+    }
+
+    private void onDeviceLocationOff() {
+        chipAccuracy.setText(R.string.record_accuracy_gps_off);
+        Toast.makeText(this, R.string.location_disabled_message, Toast.LENGTH_LONG).show();
+    }
+
+    private void onLocation(Location location) {
+        chipAccuracy.setText(getString(R.string.record_accuracy, Math.round(location.getAccuracy())));
+
+        if (googleMap == null) {
+            return;
+        }
+        LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+        if (cameraCentered) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(position));
+        } else {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, INITIAL_ZOOM));
+            cameraCentered = true;
+        }
+    }
+
+    // Temporary blue dot until the custom marker (#21); needs both the map and the permission
+    @SuppressLint("MissingPermission")
+    private void enableMyLocationLayer() {
+        if (googleMap == null || !hasLocationPermission) {
+            return;
+        }
+        googleMap.setMyLocationEnabled(true);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
     }
 
     private void onLocationPermissionDenied() {
@@ -144,6 +225,8 @@ public class RecordTrailActivity extends AppCompatActivity {
         UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setCompassEnabled(false);
         uiSettings.setMapToolbarEnabled(false);
+
+        enableMyLocationLayer();
     }
 
     private int toGoogleMapType(SettingsPrefs.MapType mapType) {
