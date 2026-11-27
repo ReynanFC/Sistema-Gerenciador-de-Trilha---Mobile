@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -57,6 +59,8 @@ public class RecordTrailActivity extends AppCompatActivity {
 
     private static final float INITIAL_ZOOM = 17f;
     private static final long TIMER_TICK_MILLIS = 500;
+    /** m/s (~1.8 km/h): below this the GPS bearing is noise */
+    private static final float MIN_SPEED_FOR_BEARING = 0.5f;
 
     private SettingsPrefs settingsPrefs;
     @Nullable
@@ -76,6 +80,7 @@ public class RecordTrailActivity extends AppCompatActivity {
     private TextView textDistance;
     private TextView textRecordingStatus;
     private MaterialButton buttonPause;
+    private ImageButton buttonCompass;
 
     // Refreshes the timer text while the screen is visible (started in onResume, removed in onPause)
     private final Handler timerHandler = new Handler(Looper.getMainLooper());
@@ -113,6 +118,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         textDistance = findViewById(R.id.text_distance);
         textRecordingStatus = findViewById(R.id.text_recording_status);
         buttonPause = findViewById(R.id.button_pause);
+        buttonCompass = findViewById(R.id.button_compass);
         recorder = new ViewModelProvider(this).get(RecordTrailViewModel.class).recorder;
         locationTracker = new LocationTracker(this, this::onLocation);
 
@@ -120,6 +126,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         findViewById(R.id.button_back).setOnClickListener(v -> finish());
         showCurrentSettings();
         buttonPause.setOnClickListener(v -> togglePause());
+        buttonCompass.setOnClickListener(v -> resetBearing());
         renderRecordingState();
         renderStats();
         setupMap();
@@ -247,11 +254,43 @@ public class RecordTrailActivity extends AppCompatActivity {
         updateAccuracyCircle(position, location.getAccuracy());
 
         if (cameraCentered) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(position));
+            followCamera(position, location);
         } else {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, INITIAL_ZOOM));
             cameraCentered = true;
         }
+    }
+
+    /**
+     * Keeps the user in the center. North Up keeps bearing 0; Course Up turns the map so the
+     * walking direction points up. The bearing is only trusted while moving, because standing
+     * still makes the GPS heading jump around.
+     */
+    private void followCamera(LatLng position, Location location) {
+        CameraPosition current = googleMap.getCameraPosition();
+        float bearing = 0f;
+        if (isCourseUp()) {
+            boolean reliableBearing = location.hasBearing() && recorder.getCurrentSpeed() >= MIN_SPEED_FOR_BEARING;
+            bearing = reliableBearing ? location.getBearing() : current.bearing;
+        }
+        CameraPosition target = new CameraPosition.Builder(current)
+                .target(position)
+                .bearing(bearing)
+                .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(target));
+    }
+
+    private boolean isCourseUp() {
+        return settingsPrefs.getNavigationMode() == SettingsPrefs.NavigationMode.COURSE_UP;
+    }
+
+    // Compass: back to north (Course Up turns again on the next fix while walking)
+    private void resetBearing() {
+        if (googleMap == null) {
+            return;
+        }
+        CameraPosition north = new CameraPosition.Builder(googleMap.getCameraPosition()).bearing(0f).build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(north));
     }
 
     // Radius = GPS accuracy in meters: the real position is inside the circle with ~68% probability
@@ -342,6 +381,12 @@ public class RecordTrailActivity extends AppCompatActivity {
         UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setCompassEnabled(false);
         uiSettings.setMapToolbarEnabled(false);
+        // The orientation comes from the North Up / Course Up setting, not from two-finger rotation
+        uiSettings.setRotateGesturesEnabled(false);
+
+        // The compass needle points to the real north: rotate the icon against the map bearing
+        googleMap.setOnCameraMoveListener(() ->
+                buttonCompass.setRotation(-googleMap.getCameraPosition().bearing));
     }
 
     private int toGoogleMapType(SettingsPrefs.MapType mapType) {
