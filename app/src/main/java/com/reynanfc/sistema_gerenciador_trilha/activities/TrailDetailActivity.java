@@ -12,9 +12,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.reynanfc.sistema_gerenciador_trilha.R;
@@ -34,6 +36,7 @@ public class TrailDetailActivity extends AppCompatActivity {
     public static final String EXTRA_TRAIL_ID = "com.reynanfc.sistema_gerenciador_trilha.EXTRA_TRAIL_ID";
 
     private static final long NO_ID = -1;
+    private static final float SINGLE_POINT_ZOOM = 17f;
 
     private long trailId;
     private SettingsPrefs settingsPrefs;
@@ -118,6 +121,31 @@ public class TrailDetailActivity extends AppCompatActivity {
         if (route.size() > 1) {
             addPin(route.get(route.size() - 1), R.drawable.ic_pin_end);
         }
+
+        // newLatLngBounds needs the map to have a size, so wait until it finished loading
+        googleMap.setOnMapLoadedCallback(() -> frameRoute(route));
+    }
+
+    /**
+     * Fits the whole route on screen. The map padding reserves the areas covered by the top bar and
+     * the info panel, so the route is framed in the visible part between them.
+     */
+    private void frameRoute(List<LatLng> route) {
+        View overlay = findViewById(R.id.detail_overlay);
+        View topCard = findViewById(R.id.card_detail_top);
+        View infoCard = findViewById(R.id.card_detail_info);
+        googleMap.setPadding(0, topCard.getBottom(), 0, overlay.getHeight() - infoCard.getTop());
+
+        if (route.size() == 1) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(route.get(0), SINGLE_POINT_ZOOM));
+            return;
+        }
+        LatLngBounds.Builder bounds = new LatLngBounds.Builder();
+        for (LatLng position : route) {
+            bounds.include(position);
+        }
+        int padding = getResources().getDimensionPixelSize(R.dimen.detail_bounds_padding);
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), padding));
     }
 
     // Blue reads well on the light vector map; on the dark satellite imagery yellow stands out
