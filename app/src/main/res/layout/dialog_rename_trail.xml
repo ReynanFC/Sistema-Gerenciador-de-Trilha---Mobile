@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Rename trail dialog body (buttons come from MaterialAlertDialogBuilder).
+     Prototype: docs/prototipo/06-editar-nome.png -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/dialog_padding"
+    android:paddingTop="@dimen/dialog_padding"
+    android:paddingEnd="@dimen/dialog_padding">
+
+    <ImageView
+        android:layout_width="@dimen/dialog_icon_container"
+        android:layout_height="@dimen/dialog_icon_container"
+        android:background="@drawable/bg_menu_icon"
+        android:importantForAccessibility="no"
+        android:padding="12dp"
+        android:src="@drawable/ic_edit"
+        app:tint="@color/green_primary" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/rename_title"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_dialog_title" />
+
+    <TextView
+        android:id="@+id/text_rename_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/text_card_subtitle"
+        tools:text="Registrada em 22/11/2026 · 06:30" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:fontFamily="sans-serif-medium"
+        android:labelFor="@id/edit_rename"
+        android:text="@string/rename_name_label"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_card_subtitle" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout_rename"
+        style="@style/TrilhaApp.TextField"
+        android:layout_marginTop="@dimen/spacing_small">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_rename"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences"
+            android:maxLength="60"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

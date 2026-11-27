@@ -14,6 +14,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.reynanfc.sistema_gerenciador_trilha.R;
 import com.reynanfc.sistema_gerenciador_trilha.adapter.TrailAdapter;
 import com.reynanfc.sistema_gerenciador_trilha.database.TrailDao;
+import com.reynanfc.sistema_gerenciador_trilha.dialog.RenameTrailDialog;
 import com.reynanfc.sistema_gerenciador_trilha.model.Trail;
 import com.reynanfc.sistema_gerenciador_trilha.util.Async;
 import com.reynanfc.sistema_gerenciador_trilha.util.Formatters;
@@ -102,6 +103,13 @@ public class TrailListActivity extends AppCompatActivity implements TrailAdapter
 
     @Override
     public void onRename(Trail trail) {
+        RenameTrailDialog.show(this, trail, newName ->
+                Async.run(() -> trailDao.rename(trail.getId(), newName),
+                        renamed -> {
+                            Toast.makeText(this, R.string.rename_saved, Toast.LENGTH_SHORT).show();
+                            loadTrails();
+                        },
+                        error -> Toast.makeText(this, R.string.rename_error, Toast.LENGTH_LONG).show()));
     }
 
     @Override
