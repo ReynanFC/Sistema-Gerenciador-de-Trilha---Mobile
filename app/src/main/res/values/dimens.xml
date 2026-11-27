@@ -12,9 +12,7 @@
 
     <!-- Main screen -->
     <dimen name="header_icon_container">56dp</dimen>
-    <dimen name="header_icon">28dp</dimen>
     <dimen name="menu_icon_container">52dp</dimen>
-    <dimen name="menu_icon">24dp</dimen>
     <dimen name="menu_padding">18dp</dimen>
     <dimen name="chevron_size">24dp</dimen>
 
