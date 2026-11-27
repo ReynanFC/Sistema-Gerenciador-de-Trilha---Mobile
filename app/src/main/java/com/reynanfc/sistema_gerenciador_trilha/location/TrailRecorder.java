@@ -1,9 +1,10 @@
 package com.reynanfc.sistema_gerenciador_trilha.location;
 
+import android.location.Location;
 import android.os.SystemClock;
 
 /**
- * State of the trail being recorded, independent of any View: elapsed time with pauses.
+ * State of the trail being recorded, independent of any View: elapsed time with pauses and speeds.
  * Lives in a ViewModel so it survives screen rotation.
  *
  * Time uses SystemClock.elapsedRealtime(): it only moves forward, even if the user changes
@@ -14,10 +15,15 @@ public class TrailRecorder {
 
     private static final long NOT_RUNNING = -1;
 
+    /** Fixes less accurate than this (meters) do not count for max speed, distance or points */
+    public static final float MAX_ACCEPTED_ACCURACY = 25f;
+
     private boolean started;
     private long startTime;
     private long accumulatedMillis;
     private long runningSince = NOT_RUNNING;
+    private float currentSpeed;
+    private float maxSpeed;
 
     public boolean isStarted() {
         return started;
@@ -49,6 +55,28 @@ public class TrailRecorder {
             return;
         }
         runningSince = SystemClock.elapsedRealtime();
+    }
+
+    /** Feeds a GPS fix into the recording. Paused fixes still update the current speed only. */
+    public void addLocation(Location location) {
+        // Not every fix carries a speed (e.g. network location); treat it as standing still
+        currentSpeed = location.hasSpeed() ? location.getSpeed() : 0f;
+
+        if (!isRunning() || location.getAccuracy() > MAX_ACCEPTED_ACCURACY) {
+            return;
+        }
+        // Inaccurate fixes are skipped above because they produce speed spikes
+        maxSpeed = Math.max(maxSpeed, currentSpeed);
+    }
+
+    /** m/s */
+    public float getCurrentSpeed() {
+        return currentSpeed;
+    }
+
+    /** m/s */
+    public float getMaxSpeed() {
+        return maxSpeed;
     }
 
     /** Recorded time without the pauses */

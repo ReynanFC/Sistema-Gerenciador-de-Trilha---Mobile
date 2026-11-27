@@ -71,6 +71,8 @@ public class RecordTrailActivity extends AppCompatActivity {
     private Circle accuracyCircle;
     private TrailRecorder recorder;
     private TextView textTimer;
+    private TextView textSpeed;
+    private TextView textMaxSpeed;
     private TextView textRecordingStatus;
     private MaterialButton buttonPause;
 
@@ -105,6 +107,8 @@ public class RecordTrailActivity extends AppCompatActivity {
         settingsPrefs = new SettingsPrefs(this);
         chipAccuracy = findViewById(R.id.chip_accuracy);
         textTimer = findViewById(R.id.text_timer);
+        textSpeed = findViewById(R.id.text_speed);
+        textMaxSpeed = findViewById(R.id.text_max_speed);
         textRecordingStatus = findViewById(R.id.text_recording_status);
         buttonPause = findViewById(R.id.button_pause);
         recorder = new ViewModelProvider(this).get(RecordTrailViewModel.class).recorder;
@@ -115,6 +119,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         showCurrentSettings();
         buttonPause.setOnClickListener(v -> togglePause());
         renderRecordingState();
+        renderStats();
         setupMap();
         checkLocationPermission();
     }
@@ -159,6 +164,11 @@ public class RecordTrailActivity extends AppCompatActivity {
         boolean paused = recorder.isStarted() && !recorder.isRunning();
         buttonPause.setText(paused ? R.string.record_resume : R.string.record_pause);
         buttonPause.setIconResource(paused ? R.drawable.ic_play : R.drawable.ic_pause);
+    }
+
+    private void renderStats() {
+        textSpeed.setText(Formatters.speedKmh(recorder.getCurrentSpeed()));
+        textMaxSpeed.setText(Formatters.speedKmh(recorder.getMaxSpeed()));
     }
 
     private void setRecordingStatus(@StringRes int textResId, @DrawableRes int dotResId) {
@@ -221,6 +231,8 @@ public class RecordTrailActivity extends AppCompatActivity {
             recorder.start();
             renderRecordingState();
         }
+        recorder.addLocation(location);
+        renderStats();
 
         chipAccuracy.setText(getString(R.string.record_accuracy, Math.round(location.getAccuracy())));
 
