@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Delete trails dialog: selected trail / date range / all, with irreversible warning.
+     Prototype: docs/prototipo/07-apagar-trilhas.png -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dialog_padding">
+
+        <ImageView
+            android:layout_width="@dimen/dialog_icon_container"
+            android:layout_height="@dimen/dialog_icon_container"
+            android:background="@drawable/bg_icon_destructive"
+            android:importantForAccessibility="no"
+            android:padding="12dp"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/red_destructive" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/delete_title"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_dialog_title" />
+
+        <!-- Selected trail (hidden when opened from the app bar) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/option_delete_selected"
+            style="@style/TrilhaApp.Card.Option.Destructive">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/option_padding">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/radio_delete_selected"
+                    style="@style/TrilhaApp.OptionRadio" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TrilhaApp.OptionTitle"
+                        android:text="@string/delete_option_selected" />
+
+                    <TextView
+                        android:id="@+id/text_delete_selected"
+                        style="@style/TrilhaApp.OptionDescription"
+                        tools:text="Volta da Lagoa · 22/11/2026" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Date range -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/option_delete_range"
+            style="@style/TrilhaApp.Card.Option.Destructive">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/option_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/radio_delete_range"
+                        style="@style/TrilhaApp.OptionRadio" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TrilhaApp.OptionTitle"
+                            android:text="@string/delete_option_range" />
+
+                        <TextView
+                            style="@style/TrilhaApp.OptionDescription"
+                            android:text="@string/delete_option_range_description" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- From / To: only visible while the range option is selected -->
+                <LinearLayout
+                    android:id="@+id/layout_range_fields"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_range_from"
+                        style="@style/TrilhaApp.TextField"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:hint="@string/delete_from"
+                        app:startIconDrawable="@drawable/ic_calendar">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_range_from"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_range_to"
+                        style="@style/TrilhaApp.TextField"
+                        android:layout_width="0dp"
+                        android:layout_marginStart="@dimen/spacing_small"
+                        android:layout_weight="1"
+                        android:hint="@string/delete_to"
+                        app:startIconDrawable="@drawable/ic_calendar">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_range_to"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- All trails -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/option_delete_all"
+            style="@style/TrilhaApp.Card.Option.Destructive">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/option_padding">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/radio_delete_all"
+                    style="@style/TrilhaApp.OptionRadio" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TrilhaApp.OptionTitle"
+                        android:text="@string/delete_option_all" />
+
+                    <TextView
+                        android:id="@+id/text_delete_all"
+                        style="@style/TrilhaApp.OptionDescription"
+                        tools:text="5 trilhas serão apagadas" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/text_delete_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:drawablePadding="@dimen/spacing_small"
+            android:gravity="center_vertical"
+            android:text="@string/delete_warning"
+            android:textColor="@color/red_destructive"
+            android:textSize="@dimen/text_card_subtitle"
+            app:drawableStartCompat="@drawable/ic_warning"
+            app:drawableTint="@color/red_destructive" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_delete_cancel"
+                style="@style/TrilhaApp.Button.Text"
+                android:layout_marginEnd="@dimen/spacing_small"
+                android:text="@string/action_cancel" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_delete_confirm"
+                style="@style/TrilhaApp.Button.Destructive"
+                android:text="@string/action_delete" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
