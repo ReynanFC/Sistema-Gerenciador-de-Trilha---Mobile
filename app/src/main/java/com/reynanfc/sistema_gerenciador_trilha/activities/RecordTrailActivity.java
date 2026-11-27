@@ -73,6 +73,7 @@ public class RecordTrailActivity extends AppCompatActivity {
     private TextView textTimer;
     private TextView textSpeed;
     private TextView textMaxSpeed;
+    private TextView textDistance;
     private TextView textRecordingStatus;
     private MaterialButton buttonPause;
 
@@ -109,6 +110,7 @@ public class RecordTrailActivity extends AppCompatActivity {
         textTimer = findViewById(R.id.text_timer);
         textSpeed = findViewById(R.id.text_speed);
         textMaxSpeed = findViewById(R.id.text_max_speed);
+        textDistance = findViewById(R.id.text_distance);
         textRecordingStatus = findViewById(R.id.text_recording_status);
         buttonPause = findViewById(R.id.button_pause);
         recorder = new ViewModelProvider(this).get(RecordTrailViewModel.class).recorder;
@@ -169,6 +171,7 @@ public class RecordTrailActivity extends AppCompatActivity {
     private void renderStats() {
         textSpeed.setText(Formatters.speedKmh(recorder.getCurrentSpeed()));
         textMaxSpeed.setText(Formatters.speedKmh(recorder.getMaxSpeed()));
+        textDistance.setText(Formatters.distanceKm(recorder.getDistance()));
     }
 
     private void setRecordingStatus(@StringRes int textResId, @DrawableRes int dotResId) {
