@@ -47,4 +47,11 @@
     <dimen name="text_timer">40sp</dimen>
     <dimen name="text_stat_value">20sp</dimen>
     <dimen name="text_stat_unit">13sp</dimen>
+
+    <!-- Finish sheet / detail tiles -->
+    <dimen name="tile_padding">12dp</dimen>
+    <dimen name="text_tile_value">16sp</dimen>
+    <dimen name="text_sheet_title">22sp</dimen>
+    <dimen name="sheet_handle_width">36dp</dimen>
+    <dimen name="sheet_handle_height">4dp</dimen>
 </resources>

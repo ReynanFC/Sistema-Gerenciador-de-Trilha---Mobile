@@ -72,4 +72,28 @@
     <string name="permission_continue">Continuar</string>
     <string name="permission_try_again">Tentar novamente</string>
     <string name="permission_open_settings">Abrir configurações</string>
+
+    <!-- Finish trail sheet -->
+    <string name="finish_title">Finalizar trilha</string>
+    <string name="finish_subtitle">Dê um nome para salvar o percurso.</string>
+    <string name="finish_name_label">Nome da trilha</string>
+    <string name="finish_name_hint">Ex.: Trilha do Parque</string>
+    <string name="finish_name_required">Informe um nome para a trilha</string>
+    <string name="finish_start">Início</string>
+    <string name="finish_end">Fim</string>
+    <string name="finish_duration">Duração</string>
+    <string name="finish_average_speed">Vel. média</string>
+    <string name="finish_max_speed">Vel. máxima</string>
+    <string name="finish_discard">Descartar</string>
+    <string name="finish_save">Salvar trilha</string>
+    <string name="finish_saved">Trilha salva</string>
+    <string name="finish_save_error">Não foi possível salvar a trilha</string>
+    <string name="finish_discard_title">Descartar trilha?</string>
+    <string name="finish_discard_message">O percurso gravado será perdido.</string>
+    <string name="finish_no_points_title">Nenhuma posição gravada</string>
+    <string name="finish_no_points_message">O GPS ainda não registrou nenhum ponto válido. Continue gravando ou descarte a trilha.</string>
+    <string name="finish_keep_recording">Continuar gravando</string>
+    <string name="value_km">%1$s km</string>
+    <string name="value_kmh">%1$s km/h</string>
+    <string name="action_cancel">Cancelar</string>
 </resources>
