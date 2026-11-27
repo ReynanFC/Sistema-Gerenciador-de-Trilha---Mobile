@@ -27,6 +27,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -55,6 +57,8 @@ public class RecordTrailActivity extends AppCompatActivity {
     private boolean cameraCentered;
     @Nullable
     private Marker positionMarker;
+    @Nullable
+    private Circle accuracyCircle;
 
     // Must be registered before the Activity is started, so it is a field and not created on demand
     private final ActivityResultLauncher<String[]> locationPermissionLauncher =
@@ -157,12 +161,28 @@ public class RecordTrailActivity extends AppCompatActivity {
         }
         LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
         updatePositionMarker(position, location);
+        updateAccuracyCircle(position, location.getAccuracy());
 
         if (cameraCentered) {
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(position));
         } else {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, INITIAL_ZOOM));
             cameraCentered = true;
+        }
+    }
+
+    // Radius = GPS accuracy in meters: the real position is inside the circle with ~68% probability
+    private void updateAccuracyCircle(LatLng center, float accuracyMeters) {
+        if (accuracyCircle == null) {
+            accuracyCircle = googleMap.addCircle(new CircleOptions()
+                    .center(center)
+                    .radius(accuracyMeters)
+                    .fillColor(ContextCompat.getColor(this, R.color.accuracy_fill))
+                    .strokeColor(ContextCompat.getColor(this, R.color.accuracy_stroke))
+                    .strokeWidth(getResources().getDimension(R.dimen.accuracy_stroke_width)));
+        } else {
+            accuracyCircle.setCenter(center);
+            accuracyCircle.setRadius(accuracyMeters);
         }
     }
 
