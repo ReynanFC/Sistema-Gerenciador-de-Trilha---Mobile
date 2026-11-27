@@ -286,4 +286,55 @@
         <item name="android:padding">12dp</item>
         <item name="android:scaleType">fitCenter</item>
     </style>
+
+    <!-- Option card of the delete dialog: same as the settings options, in red -->
+    <style name="TrilhaApp.Card.Option.Destructive">
+        <item name="strokeColor">@color/selector_option_stroke_destructive</item>
+        <item name="cardBackgroundColor">@color/selector_option_background_destructive</item>
+    </style>
+
+    <style name="TrilhaApp.OptionTitle" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">@dimen/text_card_title</item>
+    </style>
+
+    <style name="TrilhaApp.OptionDescription" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">@dimen/text_card_subtitle</item>
+    </style>
+
+    <style name="TrilhaApp.OptionRadio" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/spacing_medium</item>
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
+        <item name="android:importantForAccessibility">no</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="buttonTint">@color/selector_option_stroke_destructive</item>
+    </style>
+
+    <!-- Red filled button (Apagar) -->
+    <style name="TrilhaApp.Button.Destructive" parent="Widget.Material3.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/min_touch_target</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="backgroundTint">@color/red_destructive</item>
+        <item name="android:textColor">@color/text_on_primary</item>
+        <item name="cornerRadius">@dimen/icon_corner_radius</item>
+    </style>
+
+    <style name="TrilhaApp.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/min_touch_target</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/green_primary</item>
+    </style>
 </resources>

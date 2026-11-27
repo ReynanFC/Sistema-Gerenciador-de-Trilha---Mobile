@@ -14,6 +14,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.reynanfc.sistema_gerenciador_trilha.R;
 import com.reynanfc.sistema_gerenciador_trilha.adapter.TrailAdapter;
 import com.reynanfc.sistema_gerenciador_trilha.database.TrailDao;
+import com.reynanfc.sistema_gerenciador_trilha.dialog.DeleteTrailsDialog;
 import com.reynanfc.sistema_gerenciador_trilha.dialog.RenameTrailDialog;
 import com.reynanfc.sistema_gerenciador_trilha.model.Trail;
 import com.reynanfc.sistema_gerenciador_trilha.util.Async;
@@ -21,6 +22,7 @@ import com.reynanfc.sistema_gerenciador_trilha.util.Formatters;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class TrailListActivity extends AppCompatActivity implements TrailAdapter.Listener {
 
@@ -114,8 +116,42 @@ public class TrailListActivity extends AppCompatActivity implements TrailAdapter
 
     @Override
     public void onDelete(Trail trail) {
+        DeleteTrailsDialog.show(this, trail, trails.size(), deleteCallbacks);
     }
 
     private void onDeleteMany() {
+        if (trails.isEmpty()) {
+            Toast.makeText(this, R.string.delete_nothing, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        DeleteTrailsDialog.show(this, null, trails.size(), deleteCallbacks);
+    }
+
+    // Each mode maps to one DAO method; the points go with the trails through ON DELETE CASCADE
+    private final DeleteTrailsDialog.Callbacks deleteCallbacks = new DeleteTrailsDialog.Callbacks() {
+        @Override
+        public void deleteOne(Trail trail) {
+            runDelete(() -> trailDao.delete(trail.getId()));
+        }
+
+        @Override
+        public void deleteBetween(long fromMillis, long toMillis) {
+            runDelete(() -> trailDao.deleteBetween(fromMillis, toMillis));
+        }
+
+        @Override
+        public void deleteAll() {
+            runDelete(trailDao::deleteAll);
+        }
+    };
+
+    private void runDelete(Callable<Integer> delete) {
+        Async.run(delete,
+                count -> {
+                    Toast.makeText(this, getResources().getQuantityString(
+                            R.plurals.delete_done, count, count), Toast.LENGTH_SHORT).show();
+                    loadTrails();
+                },
+                error -> Toast.makeText(this, R.string.delete_error, Toast.LENGTH_LONG).show());
     }
 }

@@ -120,4 +120,27 @@
     <string name="rename_saved">Nome atualizado</string>
     <string name="rename_error">Não foi possível renomear a trilha</string>
     <string name="action_save">Salvar</string>
+
+    <!-- Delete dialog -->
+    <string name="delete_title">Apagar trilhas</string>
+    <string name="delete_option_selected">Trilha selecionada</string>
+    <string name="delete_option_range">Trilhas em um intervalo</string>
+    <string name="delete_option_range_description">Escolha as datas inicial e final</string>
+    <string name="delete_option_all">Todas as trilhas</string>
+    <plurals name="delete_all_description">
+        <item quantity="one">%d trilha será apagada</item>
+        <item quantity="other">%d trilhas serão apagadas</item>
+    </plurals>
+    <string name="delete_from">De</string>
+    <string name="delete_to">Até</string>
+    <string name="delete_pick_dates">Escolha as duas datas</string>
+    <string name="delete_inverted_range">A data inicial é depois da final</string>
+    <string name="delete_warning">Essa ação não pode ser desfeita.</string>
+    <string name="delete_selected_description">%1$s · %2$s</string>
+    <plurals name="delete_done">
+        <item quantity="one">%d trilha apagada</item>
+        <item quantity="other">%d trilhas apagadas</item>
+    </plurals>
+    <string name="delete_nothing">Nenhuma trilha para apagar</string>
+    <string name="delete_error">Não foi possível apagar as trilhas</string>
 </resources>
