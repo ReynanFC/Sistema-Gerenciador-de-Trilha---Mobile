@@ -101,6 +101,9 @@ public class TrailListActivity extends AppCompatActivity implements TrailAdapter
 
     @Override
     public void onOpen(Trail trail) {
+        Intent intent = new Intent(this, TrailDetailActivity.class);
+        intent.putExtra(TrailDetailActivity.EXTRA_TRAIL_ID, trail.getId());
+        startActivity(intent);
     }
 
     @Override
