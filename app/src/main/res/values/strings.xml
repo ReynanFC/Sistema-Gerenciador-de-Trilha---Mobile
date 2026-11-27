@@ -59,6 +59,8 @@
     <string name="record_finish">Finalizar</string>
     <string name="action_compass">Bússola</string>
     <string name="record_accuracy_no_permission">Sem permissão de GPS</string>
+    <string name="record_accuracy_gps_off">GPS desligado</string>
+    <string name="location_disabled_message">Ative a localização do aparelho para gravar a trilha.</string>
 
     <!-- Location permission -->
     <string name="permission_location_title">Permissão de localização</string>
